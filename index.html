@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIHand: Enhancing Hand Pose Estimation with Visual-Inertial Benchmark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',        // 主色调：深蓝色
+                        secondary: '#3B82F6',      // 辅助色：浅蓝色
+                        accent: '#F97316',         // 强调色：橙色
+                        dark: '#1E293B',           // 深色：深灰
+                        light: '#F8FAFC',          // 浅色：接近白色
+                        neutral: '#64748B',        // 中性色：中灰
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .hover-scale {
+                transition: transform 0.3s ease;
+            }
+            .hover-scale:hover {
+                transform: scale(1.03);
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.8s ease-in-out;
+            }
+            .animate-slide-up {
+                animation: slideUp 0.8s ease-out;
+            }
+            .pill-button {
+                @apply px-6 py-2.5 bg-dark hover:bg-accent text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center text-sm;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes slideUp {
+                from { transform: translateY(20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            /* 新增表格单元格内边距样式 */
+            .table-cell-padding {
+                @apply px-4 py-2.5;  /* 调整内边距减少行高 */
+            }
+            /* 表格行高调整 */
+            .table-row-height {
+                height: 50%;  /* 原高度的75% */
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light text-dark antialiased text-lg">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full bg-white/90 backdrop-blur-md z-50 transition-all duration-300 shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl"><i class="fa fa-cube text-primary"></i></span>
+                <span class="font-bold text-xl text-primary">VIHand</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#abstract" class="font-medium hover:text-primary transition-colors">Abstract</a>
+                <a href="#dataset" class="font-medium hover:text-primary transition-colors">Dataset</a>
+                <a href="#benchmark" class="font-medium hover:text-primary transition-colors">Benchmark</a>
+                <a href="#results" class="font-medium hover:text-primary transition-colors">Results</a>
+                <a href="#Details" class="font-medium hover:text-primary transition-colors">Details</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-dark focus:outline-none">
+                    <i class="fa fa-bars text-primary text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg animate-fade-in">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#abstract" class="font-medium py-2 hover:text-primary transition-colors">Abstract</a>
+                <a href="#dataset" class="font-medium py-2 hover:text-primary transition-colors">Dataset</a>
+                <a href="#benchmark" class="font-medium py-2 hover:text-primary transition-colors">Benchmark</a>
+                <a href="#results" class="font-medium py-2 hover:text-primary transition-colors">Results</a>
+                <a href="#Details" class="font-medium py-2 hover:text-primary transition-colors">Details</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <header class="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-primary/5 to-light">
+        <div class="container mx-auto px-4">
+            <div class="max-w-7xl mx-auto text-center">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-dark mb-6 animate-fade-in">
+                    VIHand: Enhancing 3D Hand Pose Estimation with Visual-Inertial Benchmark
+                </h1>
+                <p class="text-[clamp(1.1rem,2vw,1.3rem)] text-gray-600 mb-8 animate-slide-up">
+
+                </p>
+                <table align=center width=700px>
+                    <tr>
+                        <center>
+                            <span style="font-size:20px">Xinyi Wang<sup>1</sup></span> &nbsp;&nbsp;&nbsp;
+                            <span style="font-size:20px">Pengfei Ren<sup>2</sup></span> &nbsp;&nbsp;&nbsp;
+                            <span style="font-size:20px">Haoyang Zhang<sup>3</sup></span> &nbsp;&nbsp;&nbsp;
+                            <span style="font-size:20px">Xin Sheng<sup>4</sup></span> &nbsp;
+                            <span style="font-size:20px">Da Li<sup>5</sup></span> &nbsp;&nbsp;&nbsp;
+                            <span style="font-size:20px">Liang Xie<sup>3</sup></span> &nbsp;&nbsp;&nbsp;
+                            <span style="font-size:20px">Yue Gao<sup>1</sup></span> &nbsp;
+                            <span style="font-size:20px">Erwei Yin<sup>1, 3</sup></span>
+                        </center>
+                    </tr>
+                </table>
+
+                <table align=center width=700px>
+                    <tr>
+                        <td align=center width=100px>
+                            <center>
+                                <span style="font-size:20px"><sup>1</sup>Shanghai Jiao Tong University</span> &nbsp;
+                                <span style="font-size:20px"><sup>2</sup>Beijing University of Posts and Telecommunications</span> &nbsp;
+                                <span style="font-size:20px"><sup>3</sup>Defense Innovation Institute, Academy of Military Sciences</span> &nbsp;
+                                <span style="font-size:20px"><sup>4</sup>Tianjin University</span> &nbsp;
+                                <span style="font-size:20px"><sup>5</sup>Nankai University</span>
+                            </center>
+                        </td>
+                    </tr>
+                </table>
+
+                <br>
+                <div class="flex flex-wrap justify-center gap-4 animate-slide-up" style="animation-delay: 0.4s;">
+                    <a href="https://github.com/Shirley0118/VIHand/tree/main/code" class="pill-button">
+                        <i class="fa fa-github text-white mr-2"></i> Code
+                    </a>
+                    <a href="https://pan.quark.cn/s/ef5ca6eedc17" class="pill-button">
+                        <i class="fa fa-database text-white mr-2"></i> Dataset
+                    </a>
+                    <a href="https://shirley0118.github.io/VIHand/SupplementaryMaterials.pdf" class="pill-button">
+                        <i class="fa fa-file-pdf-o text-white mr-2"></i> Supplementary materials
+                    </a>
+
+                </div>
+                <br>
+                <br>
+<div class="video-container mt-8 animate-fade-in" style="width: 90%; margin: 0 auto;">
+    <video
+        controls
+        autoplay
+        loop
+        muted
+        class="w-full rounded-lg shadow-lg"
+        style="max-width: 100%; height: auto;">
+        <source src="https://shirley0118.github.io/VIHand/demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+                <div style="width: 90%; margin-left: 5%;">
+                    <img src="https://shirley0118.github.io/VIHand/overview.jpg" alt="Dataset Overview" class="w-full h-auto rounded-lg mt-8">
+                    <p class="mt-6 text-lg text-gray-700 text-justify leading-relaxed animate-fade-in" style="animation-delay: 0.6s;">
+                        VIHand is the first large-scale glove-worn dataset for visual-inertial hand pose estimation,
+                        containing over 1.4 million synchronized RGB-D and IMU frames from 15 subjects.
+                        It provides accurate frame-level 3D joint annotations across complex gestures,
+                        enabling comprehensive research in HPE tasks, including multimodal fusion, cross-modal knowledge transfer and cross-modal data generation, etc.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 摘要部分 -->
+    <section id="abstract" class="py-12 scroll-mt-24">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-center">Abstract</h2>
+            <p class="text-xl text-gray-700 leading-relaxed mb-6 text-justify">
+           Accurate and robust 3D hand pose estimation (HPE) plays a crucial role in human-computer interaction. Existing 3D HPE solutions predominantly rely on vision-based or inertial measurement units (IMUs)-based methods. 
+                Vision-based methods benefit from rich appearance information for high-accuracy HPE but are sensitive to field of view (FoV), occlusion, motion blur and lighting. 
+                IMU-based methods can operate immune to optical sensitivity and FoV constraints but remain vulnerable to cumulative integration errors and drift. Given their complementary strengths, 
+                combining dual modalities offers a promising direction for HPE in complex environments. However, the lack of large-scale visual-inertial datasets has limited progress in this area. 
+                In this paper, we construct VIHand, the first large-scale glove-worn dataset for visual-inertial HPE, comprising over 1.4 million synchronized RGB-D and IMU frames from 15 subjects. 
+                It enables comprehensive research in HPE tasks, such as multimodal fusion and cross-modal knowledge transfer. Building on VIHand, we propose visual-inertial fusion network (VIFNet) for dual-modalities estimation, 
+                and its distilled student model (VIFNet-S) for IMU-only evaluation. Experimental results reveal that integrating visual and inertial modalities significantly improves the accuracy and robustness of 3D HPE, 
+                particularly under occlusion and motion blur. 
+                In IMU-only inference even sparse IMU configurations, models distilled from visual-inertial supervision achieve substantial performance gains, 
+                enabling robust HPE for challenging optical sensitive scenarios.
+            </p>
+        </div>
+    </section>
+
+
+
+    <section id="dataset" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Capture System</h2>
+            <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
+                <p class="text-gray-700 mb-4 text-lg text-justify">VIHand was collected using a synchronized multi-sensor system, consisting of 5 Intel RealSense D415i cameras and a data glove equipped with 7 IMU sensors.
+                5 cameras were placed at diverse viewpoints around the hand to synchronously capture high-resolution RGB-D stream at 1280$\times$720 resolution and 30 FPS.
+                    To capture the dynamic inertial data of hand motion, 7 IMUs were embedded in the data glove at the wrist, palm,
+thumb,          index, middle finger, ring finger and little finger.
+
+                </p>
+                <div class="overflow-hidden rounded-lg">
+                    <img src="https://shirley0118.github.io/VIHand/capture.jpg" alt="capture system" class="w-full h-auto object-cover rounded-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 方法部分 -->
+    <section id="benchmark" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Benchmark</h2>
+            <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
+                <p class="text-gray-700 mb-4 text-lg text-justify">Overall framework, The fusion model (VlfNet) takes a monocular RGB and IMU data as input, extracts spatial anc
+                    temporal features, and fuses them via cross attention mechanism, The fused features are then decoded by the MANO head to
+                    estimate 3D hand pose. The student model (VlFNet-S), trained on lMU data alone, learns to mimic the VlNet's fused features
+                    representation through knowledge distillation.</p>
+                <div class="overflow-hidden rounded-lg">
+                    <img src="https://shirley0118.github.io/VIHand/pipeline.jpg" alt="VIHand Architecture Diagram" class="w-full h-auto object-cover rounded-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 结果部分 -->
+    <section id="results" class="py-12 scroll-mt-24">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Results</h2>
+            <div class="grid grid-cols-1 gap-6 mb-10">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.
+                            This demonstrates that integrating visual and inertial modalities significantly improves the accuracy and robustness of 3D HPE,
+                            particularly under occlusion and motion blur scenarios.</p>
+                        <p class="text-gray-700 mb-4">
+                            <img src="https://shirley0118.github.io/VIHand/sample.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
+                        </p>
+<!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
+                        <div class="h-5">
+                            <canvas id="benchmarkChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dataset Directory Structure -->
+    <section id="Details" class="py-12 scroll-mt-24 bg-gray-100 rounded-2xl">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-center">Dataset Directory Structure</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md overflow-x-auto">
+                <pre class="text-lg font-mono leading-relaxed">
+            ${ROOT}
+            ├── multidata
+            │   ├── subject1 ~ subject15           # 15 subjects
+            │   │   ├── ROM01 ~ ROM15              # 15 gesture sequences
+            │   │   │   ├── camera0 ~ camera4      # 5 camera views
+            │   │   │   │   ├── rgb                # RGB sequences
+            │   │   │   │   ├── depth              # Depth map sequences
+            │   │   │   │   ├── bbox.json          # bounding box
+            │   │   │   │   └── center.json        # Depth map center
+            │   │   │   │── IMU.json               # IMU sequences
+            │   │   │   └── camera_paras.json      # camera parameters
+            │   │   │...
+            │   │...
+            ├── annotations
+            │   ├── subject1 ~ subject15
+            │   │   ├── ROM01 ~ ROM15
+            │   │   │   ├── joint.json
+            │   │   │   ├── mano.json
+            │   │   │   └── mesh.json
+            │   │   │...
+            │   │...
+                </pre>
+            </div>
+            <div class="note mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md">
+                <p class="text-lg">
+                    Note: The above directory structure is a representation of how the dataset is organized. Each directory and file serves a specific purpose in the dataset's organization.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dataset Details -->
+    <section class="py-12 scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Dataset Details</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 左侧列：两个表格 -->
+                <div class="space-y-8">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-xl font-bold text-center">Frame Distribution by Category</h3> <!-- 标题居中 -->
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-row-height"> <!-- 应用行高调整 -->
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="table-cell-padding text-left" style="width: 60%;">Category</th>
+                                        <th class="table-cell-padding text-left" style="width: 40%;">Total Frames</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Train Set</div></td>
+                                        <td class="table-cell-padding"><div class="text-lg font-bold gradient-bg inline-block px-2 py-0.5 rounded">1.06M</div></td>
+                                    </tr>
+                                    <!-- 删除了Validation Set行 -->
+                                    <tr>
+                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Test Set</div></td>
+                                        <td class="table-cell-padding"><div class="text-lg font-bold bg-gray-200 text-gray-900 inline-block px-2 py-0.5 rounded">340K</div></td> <!-- 取消红色背景 -->
+                                    </tr>
+                                    <tr class="bg-gradient-to-r from-blue-500 to-purple-600">
+                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">Total</div></td>
+                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">1.4M</div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+<!--                        <div class="p-6 border-b border-gray-200">-->
+<!--                            <h3 class="text-xl font-bold text-center">Subject Information</h3> &lt;!&ndash; 标题居中 &ndash;&gt;-->
+<!--                        </div>-->
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-row-height"> <!-- 应用行高调整 -->
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="table-cell-padding text-left" style="width: 60%;">Subject ID</th>
+                                        <th class="table-cell-padding text-left" style="width: 40%;">Gender</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="subjectTable">
+                                    <!-- 动态生成的内容 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧列：长图片 -->
+                <div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-xl font-bold text-center">Data Sample</h3> <!-- 标题居中 -->
+                        </div>
+                        <div class="flex-grow flex items-center justify-center p-6">
+                            <img src="https://shirley0118.github.io/VIHand/data_sample.jpg" alt="Data Sample" class="w-full h-auto rounded-lg shadow-md">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!--     <div class="bg-white rounded-xl shadow-lg p-6 max-w-6xl mx-auto"> -->
+<!--         <h3 class="text-xl font-semibold mb-4">Related Works</h3> -->
+<!--         <ul class="space-y-4"> -->
+<!--             <li class="flex items-start"> -->
+<!--                 <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0"> -->
+<!--                     <i class="fa fa-file-text-o text-primary"></i> -->
+<!--                 </div> -->
+<!--                 <div> -->
+<!--                     <a href="#" class="font-medium hover:text-primary transition-colors">A Dual-Branch Self-Boosting Framework for Self-Supervised 3D Hand Pose Estimation</a> -->
+<!--                     <p class="text-gray-600 text-sm">Pengfei Ren et al.,TIP 2022</p> -->
+<!--                 </div> -->
+<!--             </li> -->
+<!--             <li class="flex items-start"> -->
+<!--                 <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0"> -->
+<!--                     <i class="fa fa-file-text-o text-primary"></i> -->
+<!--                 </div> -->
+<!--                 <div> -->
+<!--                     <a href="#" class="font-medium hover:text-primary transition-colors">Mining multi-view information: a strong self-supervised framework for depth-based 3D hand pose and mesh estimation</a> -->
+<!--                     <p class="text-gray-600 text-sm">Pengfei Ren et al.,CVPR 2022</p> -->
+<!--                 </div> -->
+<!--             </li> -->
+<!--             <li class="flex items-start"> -->
+<!--                 <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0"> -->
+<!--                     <i class="fa fa-file-text-o text-primary"></i> -->
+<!--                 </div> -->
+<!--                 <div> -->
+<!--                     <a href="#" class="font-medium hover:text-primary transition-colors">Embodied Hands: Modeling and Capturing Hands and Bodies Together</a> -->
+<!--                     <p class="text-gray-600 text-sm">Javier Romero et al.,TOG 2017</p> -->
+<!--                 </div> -->
+<!--             </li> -->
+<!--         </ul> -->
+<!--     </div> -->
+
+<!--     Acknowledgments部分 -->
+    <section id="acknowledgments" class="py-12 scroll-mt-24">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-8 text-center">Acknowledgments</h2>
+            <p class="text-gray-700 text-justify">
+                This work was supported in part by the National Natural Science Foundation of China (Nos. 62332019, 62406039),
+the National Key R&D Program of China (Nos. 2023YFF1203900, 2023YFF1203903),
+the China Postdoctoral Science Foundation (Nos. 2023TQ0039, 2024M750257, GZC20230320),
+and the Beijing Nova Program (No. 20240484513)
+            </p>
+        </div>
+    </section>
+
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-md');
+                navbar.classList.remove('py-3', 'shadow-sm');
+            } else {
+                navbar.classList.add('py-3', 'shadow-sm');
+                navbar.classList.remove('py-2', 'shadow-md');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // 关闭移动端菜单
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // 生成受试者表格内容
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.getElementById('subjectTable');
+            const subjects = [
+                { id: 'subject1', gender: 'Male' },
+                { id: 'subject2', gender: 'Female' },
+                { id: 'subject3', gender: 'Male' },
+                { id: 'subject4', gender: 'Male' },
+                { id: 'subject5', gender: 'Female' },
+                { id: 'subject6', gender: 'Female' },
+                { id: 'subject7', gender: 'Male' },
+                { id: 'subject8', gender: 'Male' },
+                { id: 'subject9', gender: 'Female' },
+                { id: 'subject10', gender: 'Male' },
+                { id: 'subject11', gender: 'Female' },
+                { id: 'subject12', gender: 'Male' },
+                { id: 'subject13', gender: 'Female' },
+                { id: 'subject14', gender: 'Male' },
+                { id: 'subject15', gender: 'Female' }
+            ];
+
+            subjects.forEach(subject => {
+                const row = document.createElement('tr');
+                row.className = 'h-8';  /* 固定行高 */
+
+                const idCell = document.createElement('td');
+                idCell.className = 'table-cell-padding whitespace-nowrap';
+                idCell.innerHTML = `<div class="text-sm font-medium ${subject.gender === 'Female' ? 'text-pink-900' : 'text-blue-900'}">${subject.id}</div>`;
+
+                const genderCell = document.createElement('td');
+                genderCell.className = 'table-cell-padding whitespace-nowrap';
+                genderCell.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="w-2.5 h-2.5 rounded-full mr-1.5 ${subject.gender === 'Female' ? 'bg-pink-600' : 'bg-blue-600'}"></span>
+                        <span class="text-sm font-medium ${subject.gender === 'Female' ? 'text-pink-900' : 'text-blue-900'}">${subject.gender}</span>
+                    </div>
+                `;
+
+                row.appendChild(idCell);
+                row.appendChild(genderCell);
+                table.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>
