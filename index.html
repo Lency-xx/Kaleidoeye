@@ -11,6 +11,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+
+    <title>KaleidoEye</title>
+      <link rel="icon" type="image/x-icon" href="https://lency-xx.github.io/Kaleidoeye/figures/kaleidoeye.ico">
+      <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+      rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -78,15 +84,16 @@
     <nav id="navbar" class="fixed w-full bg-white/90 backdrop-blur-md z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <span class="text-2xl"><i class="fa fa-cube text-primary"></i></span>
+<!--                <span class="text-2xl"><i class="fa fa-cube text-primary"></i></span>-->
                 <span class="font-bold text-xl text-primary">KaleidoEye</span>
             </div>
+
             <div class="hidden md:flex space-x-8">
                 <a href="#abstract" class="font-medium hover:text-primary transition-colors">Abstract</a>
-                <a href="#dataset" class="font-medium hover:text-primary transition-colors">Dataset</a>
+                <a href="#dataset" class="font-medium hover:text-primary transition-colors">Data Collection</a>
                 <a href="#benchmark" class="font-medium hover:text-primary transition-colors">Benchmark</a>
                 <a href="#results" class="font-medium hover:text-primary transition-colors">Results</a>
-                <a href="#Details" class="font-medium hover:text-primary transition-colors">Details</a>
+<!--                <a href="#Details" class="font-medium hover:text-primary transition-colors">Details</a>-->
             </div>
             <div class="md:hidden">
                 <button id="menu-toggle" class="text-dark focus:outline-none">
@@ -98,10 +105,10 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg animate-fade-in">
             <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
                 <a href="#abstract" class="font-medium py-2 hover:text-primary transition-colors">Abstract</a>
-                <a href="#dataset" class="font-medium py-2 hover:text-primary transition-colors">Dataset</a>
+                <a href="#dataset" class="font-medium py-2 hover:text-primary transition-colors">Data Collection</a>
                 <a href="#benchmark" class="font-medium py-2 hover:text-primary transition-colors">Benchmark</a>
                 <a href="#results" class="font-medium py-2 hover:text-primary transition-colors">Results</a>
-                <a href="#Details" class="font-medium py-2 hover:text-primary transition-colors">Details</a>
+<!--                <a href="#Details" class="font-medium py-2 hover:text-primary transition-colors">Details</a>-->
             </div>
         </div>
     </nav>
@@ -136,9 +143,12 @@
                         <td align=center width=160px>
                             <center>
                                 <span style="font-size:20px"><sup>1</sup>College of Engineering, Peking University</span> &nbsp;
+                                </br>
                                 <span style="font-size:20px"><sup>2</sup>Defense Innovation Institute, Academy of Military Sciences</span> &nbsp;
-                                <span style="font-size:20px"><sup>3</sup>Zhengzhou University</span> &nbsp;
-                                <span style="font-size:20px"><sup>4</sup>Tianjin University</span> &nbsp;
+                                </br>
+                                <span style="font-size:20px"><sup>3</sup>School of Computer and Artificial Intelligence, Zhengzhou University</span> &nbsp;
+                                </br>
+                                <span style="font-size:20px"><sup>4</sup>College of Intelligence and Computing, Tianjin University</span> &nbsp;
 <!--                                <span style="font-size:20px"><sup>5</sup>Nankai University</span>-->
                             </center>
                         </td>
@@ -147,13 +157,13 @@
 
                 <br>
                 <div class="flex flex-wrap justify-center gap-4 animate-slide-up" style="animation-delay: 0.4s;">
-                    <a href="https://github.com/Shirley0118/VIHand/tree/main/code" class="pill-button">
+                    <a href="BLANK" class="pill-button">
                         <i class="fa fa-github text-white mr-2"></i> Code
                     </a>
-                    <a href="https://pan.quark.cn/s/ef5ca6eedc17" class="pill-button">
+                    <a href="BLANK" class="pill-button">
                         <i class="fa fa-database text-white mr-2"></i> Dataset
                     </a>
-                    <a href="https://shirley0118.github.io/VIHand/SupplementaryMaterials.pdf" class="pill-button">
+                    <a href="BLANK" class="pill-button">
                         <i class="fa fa-file-pdf-o text-white mr-2"></i> Supplementary materials
                     </a>
 
@@ -177,15 +187,15 @@
 
         <!-- 第一张图片容器 -->
 <!--        <div style="width: 90%; margin: 0 auto;">-->
-<!--            <img src="https://lency-xx.github.io/Kaleidoeye/Sample_imgs.png" alt="Dataset Overview"-->
+<!--            <img src="https://lency-xx.github.io/Kaleidoeye/figures/Sample_imgs.png" alt="Dataset Overview"-->
 <!--                 class="w-full h-auto rounded-lg mt-8">-->
 <!--        </div>-->
 
         <!-- 第二张图片和文字容器 -->
         <div style="width: 90%; margin: 0 auto;">
-            <img src="https://lency-xx.github.io/Kaleidoeye/kaleidoeye_dataset.jpg" alt="Dataset Overview"
+            <img src="https://lency-xx.github.io/Kaleidoeye/figures/Intro-3.jpg" alt="Dataset Overview"
                  class="w-full h-auto rounded-lg mt-8">
-            <img src="https://lency-xx.github.io/Kaleidoeye/Sample_imgs.png" alt="Dataset Overview"
+            <img src="https://lency-xx.github.io/Kaleidoeye/figures/Sample_imgs.png" alt="Dataset Overview"
                  class="w-full h-auto rounded-lg mt-8">
             <p class="mt-6 text-lg text-gray-700 text-justify leading-relaxed animate-fade-in" style="animation-delay: 0.6s;">
                 <strong>KaleidoEye</strong> is the first large-scale gaze-tracking dataset with quantifiable 6DoF slippage annotations (comprising 3DoF rotation and 3DoF translation between the headset and the user's head).
@@ -196,7 +206,7 @@
 
 
 <!--                <div style="width: 90%; margin-left: 5%;">-->
-<!--                    <img src="https://lency-xx.github.io/Kaleidoeye/est_gaze_overview.jpg" alt="Dataset Overview" class="w-full h-auto rounded-lg mt-8">-->
+<!--                    <img src="https://lency-xx.github.io/Kaleidoeye/figures/est_gaze_overview.jpg" alt="Dataset Overview" class="w-full h-auto rounded-lg mt-8">-->
 <!--                    <p class="mt-6 text-lg text-gray-700 text-justify leading-relaxed animate-fade-in" style="animation-delay: 0.6s;">-->
 <!--                        VIHand is the first large-scale glove-worn dataset for visual-inertial hand pose estimation,-->
 <!--                        containing over 1.4 million synchronized RGB-D and IMU frames from 15 subjects.-->
@@ -219,15 +229,16 @@
     </section>
 
 
-    <section id="collection" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">
+
+    <section id="dataset" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Data Collection Overview</h2>
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Data Collection</h2>
             <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
                 <p class="text-gray-700 mb-4 text-lg text-justify">Overview of the KaleidoEye data collection protocol. (a) A robotic arm controll HMD slippage while the subject's head remains fixed. (b) HoloLens and Pupil Core are jointly calibrated to obtain accurate gaze labels and 2D/3D annotations. (c) Slippage is executed under three types (RA-RC) and paired with diverse stimulus paradigms (PA-PC). (d) The dataset includes synchronized eye images, slippage postures, gaze targets, and dense annotations.
 
                 </p>
                 <div class="overflow-hidden rounded-lg">
-                    <img src="https://lency-xx.github.io//Kaleidoeye/data_collection.jpg" alt="data collection overview" class="w-full h-auto object-cover rounded-lg">
+                    <img src="https://lency-xx.github.io//Kaleidoeye/figures/data_collection.jpg" alt="data collection overview" class="w-full h-auto object-cover rounded-lg">
                 </div>
             </div>
         </div>
@@ -242,7 +253,7 @@
 
 <!--                </p>-->
 <!--                <div class="overflow-hidden rounded-lg">-->
-<!--                    <img src="https://lency-xx.github.io/Kaleidoeye/Sample_imgs.png" alt="dataset samples" class="w-full h-auto object-cover rounded-lg">-->
+<!--                    <img src="https://lency-xx.github.io/Kaleidoeye/figures/Sample_imgs.png" alt="dataset samples" class="w-full h-auto object-cover rounded-lg">-->
 <!--                </div>-->
 <!--            </div>-->
 <!--        </div>-->
@@ -256,7 +267,7 @@
             <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
                 <p class="text-gray-700 mb-4 text-lg text-justify">Overview of the proposed EST-Gaze framework for slippage-robust gaze tracking. Given an eye image, we first extract a corresponding edge image using a multi-stage pipeline. Both the eye image and edge image are processed by separate encoders to produce feature maps $F_{\text{eye}}$ and $F_{\text{edge}}$, which are fused via a spatial attention module to generate edge weights that modulate the eye features. A pose-aware affine MLP estimates the transformation parameters $\theta$, which are used by a grid sampler to produce a spatially aligned image. The aligned image is then forwarded to an existing gaze tracking network for prediction. The entire framework is supervised by the predicted PoG and leverages both visual and geometric signals to mitigate HMD slippage.</p>
                 <div class="overflow-hidden rounded-lg">
-                    <img src="https://lency-xx.github.io/Kaleidoeye/est_gaze_overview.jpg" alt="Est_gaze_overview Architecture Diagram" class="w-full h-auto object-cover rounded-lg">
+                    <img src="https://lency-xx.github.io/Kaleidoeye/figures/est_gaze_overview.jpg" alt="Est_gaze_overview Architecture Diagram" class="w-full h-auto object-cover rounded-lg">
                 </div>
             </div>
         </div>
@@ -271,7 +282,7 @@
                     <div class="p-6">
                         <p class="text-gray-700 mb-4 text-lg text-justify"> Visual comparison between our proposed pupil center detection method (top row, green ellipses) and the Pupil Labs ground-truth annotations (bottom row, blue ellipses). Each group represents 3 representative samples from one of 6 subjects. Our method demonstrates strong alignment with the annotated pupil contours under various conditions including gaze shift, occlusion, and illumination changes.</p>
                         <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/pupil.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
+                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/pupil.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
                         </p>
 <!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
                         <div class="h-5">
@@ -282,7 +293,7 @@
                     <div class="p-6">
                         <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results of Canny edge detection on adaptively extracted ROIs. Each block shows the original grayscale eye image (top) and the corresponding edge map (bottom). Our non-learning pipeline consistently captures key anatomical structures such as eyelid and pupil contours, enabling intuitive visualization of appearance shifts caused by HMD slippage.</p>
                         <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/edge.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
+                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/edge.png" alt="Qualitative Result 2" class="rounded-lg w-full h-auto">
                         </p>
 <!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
                         <div class="h-5">
@@ -293,7 +304,7 @@
                     <div class="p-6">
                         <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative comparison of slippage correction using the proposed EST module. The top row shows original eye images under slippage, exhibiting geometric distortions such as eyelid deformation. The middle row presents the aligned outputs after applying EST. The bottom row displays non-slippage reference samples for comparison. Green dashed lines indicate key structural regions, highlighting the improvement in spatial consistency after correction.</p>
                         <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/qualitative_est.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
+                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/qualitative_est.png" alt="Qualitative Result 3" class="rounded-lg w-full h-auto">
                         </p>
 <!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
                         <div class="h-5">
@@ -305,7 +316,7 @@
                     <div class="p-6">
                         <p class="text-gray-700 mb-4 text-lg text-justify"> Subject-wise angular error comparisons across six slippage sessions. Red points indicate the baseline NVGaze error, and green points show the results with EST-Gaze. Horizontal lines mark the mean error per method. EST consistently reduces prediction bias and suppresses high-error outliers under slippage conditions.</p>
                         <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/nvgaze&estgaze-points.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
+                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/nvgaze&estgaze-points.png" alt="Qualitative Result 4" class="rounded-lg w-full h-auto">
                         </p>
 <!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
                         <div class="h-5">
@@ -331,26 +342,43 @@
             <div class="bg-white p-6 rounded-lg shadow-md overflow-x-auto">
                 <pre class="text-lg font-mono leading-relaxed">
             ${ROOT}
-            ├── multidata
-            │   ├── subject1 ~ subject15           # 15 subjects
-            │   │   ├── ROM01 ~ ROM15              # 15 gesture sequences
-            │   │   │   ├── camera0 ~ camera4      # 5 camera views
-            │   │   │   │   ├── rgb                # RGB sequences
-            │   │   │   │   ├── depth              # Depth map sequences
-            │   │   │   │   ├── bbox.json          # bounding box
-            │   │   │   │   └── center.json        # Depth map center
-            │   │   │   │── IMU.json               # IMU sequences
-            │   │   │   └── camera_paras.json      # camera parameters
+            ├── KaleidoEye
+            │   ├── Slippage
+            │   │   ├── subject1 ~ subject30                    # 30 subjects
+            │   │   │   ├── train                               # train subset: 11 sessions
+            │   │   │   │   ├── 005 ~ 008, 010, 011, 013, 014   # slippage session
+            │   │   │   │   │  ├── eye0                         # Right eye
+            │   │   │   │   │  ├── eye1                         # Left eye
+            │   │   │   │   │  └── aligned_data.csv             # Annotations
+            │   │   │   │   │...
+            │   │   │   │...
+            │   │   │   ├── test                                # test subset: 3 sessions
+            │   │   │   │   ├──  004, 009, 012                  # slippage session
+            │   │   │   │   │  ├── eye0                         # Right eye
+            │   │   │   │   │  ├── eye1                         # Left eye
+            │   │   │   │   │  └── aligned_data.csv             # Annotations
+            │   │   │   │   │...
+            │   │   │   │...
             │   │   │...
             │   │...
-            ├── annotations
-            │   ├── subject1 ~ subject15
-            │   │   ├── ROM01 ~ ROM15
-            │   │   │   ├── joint.json
-            │   │   │   ├── mano.json
-            │   │   │   └── mesh.json
+            ├── Non-Slippage
+            │   ├── subject1 ~ subject30
+            │   │   ├── subject1 ~ subject30                    # 30 subjects
+            │   │   │   ├── train                               # train subset: 3 sessions
+            │   │   │   │   ├── 001 ~ 003                       # Non-slippage session
+            │   │   │   │   │  ├── eye0                         # Right eye
+            │   │   │   │   │  ├── eye1                         # Left eye
+            │   │   │   │   │  └── aligned_data.csv             # Annotations
+            │   │   │   │   │...
+            │   │   │   │...
+            │   │   │   ├── test                                # 30 subjects
+            │   │   │   │   ├──  000                            # test subset: 1 session
+            │   │   │   │   │  ├── eye0                         # Right eye
+            │   │   │   │   │  ├── eye1                         # Left eye
+            │   │   │   │   │  └── aligned_data.csv             # Annotations
+            │   │   │   │   └────
+            │   │   │   └────
             │   │   │...
-            │   │...
                 </pre>
             </div>
             <div class="note mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md">
@@ -361,78 +389,79 @@
         </div>
     </section>
 
-    <!-- Dataset Details -->
-    <section class="py-12 scroll-mt-24">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Dataset Details</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- 左侧列：两个表格 -->
-                <div class="space-y-8">
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-xl font-bold text-center">Frame Distribution by Category</h3> <!-- 标题居中 -->
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full table-row-height"> <!-- 应用行高调整 -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="table-cell-padding text-left" style="width: 60%;">Category</th>
-                                        <th class="table-cell-padding text-left" style="width: 40%;">Total Frames</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Train Set</div></td>
-                                        <td class="table-cell-padding"><div class="text-lg font-bold gradient-bg inline-block px-2 py-0.5 rounded">1.06M</div></td>
-                                    </tr>
-                                    <!-- 删除了Validation Set行 -->
-                                    <tr>
-                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Test Set</div></td>
-                                        <td class="table-cell-padding"><div class="text-lg font-bold bg-gray-200 text-gray-900 inline-block px-2 py-0.5 rounded">340K</div></td> <!-- 取消红色背景 -->
-                                    </tr>
-                                    <tr class="bg-gradient-to-r from-blue-500 to-purple-600">
-                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">Total</div></td>
-                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">1.4M</div></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+<!--    &lt;!&ndash; Dataset Details &ndash;&gt;-->
+<!--    <section class="py-12 scroll-mt-24">-->
+<!--        <div class="max-w-7xl mx-auto px-4">-->
+<!--            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Dataset Details</h2>-->
+<!--            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">-->
+<!--                &lt;!&ndash; 左侧列：两个表格 &ndash;&gt;-->
+<!--                <div class="space-y-8">-->
+<!--                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">-->
 <!--                        <div class="p-6 border-b border-gray-200">-->
-<!--                            <h3 class="text-xl font-bold text-center">Subject Information</h3> &lt;!&ndash; 标题居中 &ndash;&gt;-->
+<!--                            <h3 class="text-xl font-bold text-center">Frame Distribution by Category</h3> &lt;!&ndash; 标题居中 &ndash;&gt;-->
 <!--                        </div>-->
-                        <div class="overflow-x-auto">
-                            <table class="w-full table-row-height"> <!-- 应用行高调整 -->
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="table-cell-padding text-left" style="width: 60%;">Subject ID</th>
-                                        <th class="table-cell-padding text-left" style="width: 40%;">Gender</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="subjectTable">
-                                    <!-- 动态生成的内容 -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+<!--                        <div class="overflow-x-auto">-->
+<!--                            <table class="w-full table-row-height"> &lt;!&ndash; 应用行高调整 &ndash;&gt;-->
+<!--                                <thead>-->
+<!--                                    <tr class="bg-gray-50">-->
+<!--                                        <th class="table-cell-padding text-left" style="width: 60%;">Category</th>-->
+<!--                                        <th class="table-cell-padding text-left" style="width: 40%;">Total Frames</th>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody class="bg-white divide-y divide-gray-200">-->
+<!--                                    <tr>-->
+<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Train Set</div></td>-->
+<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold gradient-bg inline-block px-2 py-0.5 rounded">1.06M</div></td>-->
+<!--                                    </tr>-->
+<!--                                    &lt;!&ndash; 删除了Validation Set行 &ndash;&gt;-->
+<!--                                    <tr>-->
+<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Test Set</div></td>-->
+<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold bg-gray-200 text-gray-900 inline-block px-2 py-0.5 rounded">340K</div></td> &lt;!&ndash; 取消红色背景 &ndash;&gt;-->
+<!--                                    </tr>-->
+<!--                                    <tr class="bg-gradient-to-r from-blue-500 to-purple-600">-->
+<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">Total</div></td>-->
+<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">1.4M</div></td>-->
+<!--                                    </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                <!-- 右侧列：长图片 -->
-                <div>
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-xl font-bold text-center">Data Sample</h3> <!-- 标题居中 -->
-                        </div>
-                        <div class="flex-grow flex items-center justify-center p-6">
-                            <img src="https://shirley0118.github.io/VIHand/data_sample.jpg" alt="Data Sample" class="w-full h-auto rounded-lg shadow-md">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!--                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">-->
+<!--&lt;!&ndash;                        <div class="p-6 border-b border-gray-200">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h3 class="text-xl font-bold text-center">Subject Information</h3> &lt;!&ndash; 标题居中 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                        <div class="overflow-x-auto">-->
+<!--                            <table class="w-full table-row-height"> &lt;!&ndash; 应用行高调整 &ndash;&gt;-->
+<!--                                <thead>-->
+<!--                                    <tr class="bg-gray-50">-->
+<!--                                        <th class="table-cell-padding text-left" style="width: 60%;">Subject ID</th>-->
+<!--                                        <th class="table-cell-padding text-left" style="width: 40%;">Gender</th>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody class="bg-white divide-y divide-gray-200" id="subjectTable">-->
+<!--                                    &lt;!&ndash; 动态生成的内容 &ndash;&gt;-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; 右侧列：长图片 &ndash;&gt;-->
+<!--                <div>-->
+<!--                    <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col">-->
+<!--                        <div class="p-6 border-b border-gray-200">-->
+<!--                            <h3 class="text-xl font-bold text-center">Data Sample</h3> &lt;!&ndash; 标题居中 &ndash;&gt;-->
+<!--                        </div>-->
+<!--                        <div class="flex-grow flex items-center justify-center p-6">-->
+<!--                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/slippage_pupil.png" alt="Data Sample" class="w-full table-row-height">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
 
 <!--     <div class="bg-white rounded-xl shadow-lg p-6 max-w-6xl mx-auto"> -->
 <!--         <h3 class="text-xl font-semibold mb-4">Related Works</h3> -->
@@ -472,10 +501,7 @@
         <div class="max-w-4xl mx-auto">
             <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-8 text-center">Acknowledgments</h2>
             <p class="text-gray-700 text-justify">
-                This work was supported in part by the National Natural Science Foundation of China (Nos. 62332019, 62406039),
-the National Key R&D Program of China (Nos. 2023YFF1203900, 2023YFF1203903),
-the China Postdoctoral Science Foundation (Nos. 2023TQ0039, 2024M750257, GZC20230320),
-and the Beijing Nova Program (No. 20240484513)
+                This work was supported in part by the grants from the National Natural Science Foundation of China under Grant 62332019, the National Key Research and Development Program of China (2023YFF1203900, 2023YFF1203903), Sponsored by Beijing Nova Program (20240484513).
             </p>
         </div>
     </section>
@@ -528,16 +554,31 @@ and the Beijing Nova Program (No. 20240484513)
                 { id: 'subject3', gender: 'Male' },
                 { id: 'subject4', gender: 'Male' },
                 { id: 'subject5', gender: 'Female' },
-                { id: 'subject6', gender: 'Female' },
+                { id: 'subject6', gender: 'Male' },
                 { id: 'subject7', gender: 'Male' },
                 { id: 'subject8', gender: 'Male' },
-                { id: 'subject9', gender: 'Female' },
+                { id: 'subject9', gender: 'Male' },
                 { id: 'subject10', gender: 'Male' },
                 { id: 'subject11', gender: 'Female' },
-                { id: 'subject12', gender: 'Male' },
+                { id: 'subject12', gender: 'Female' },
                 { id: 'subject13', gender: 'Female' },
                 { id: 'subject14', gender: 'Male' },
-                { id: 'subject15', gender: 'Female' }
+                { id: 'subject15', gender: 'Male' },
+                { id: 'subject16', gender: 'Female' },
+                { id: 'subject17', gender: 'Male' },
+                { id: 'subject18', gender: 'Male' },
+                { id: 'subject19', gender: 'Male' },
+                { id: 'subject20', gender: 'Male' },
+                { id: 'subject21', gender: 'Male' },
+                { id: 'subject22', gender: 'Female' },
+                { id: 'subject23', gender: 'Female' },
+                { id: 'subject24', gender: 'Male' },
+                { id: 'subject25', gender: 'Female' },
+                { id: 'subject26', gender: 'Male' },
+                { id: 'subject27', gender: 'Male' },
+                { id: 'subject28', gender: 'Male' },
+                { id: 'subject29', gender: 'Male' },
+                { id: 'subject30', gender: 'Female' }
             ];
 
             subjects.forEach(subject => {
