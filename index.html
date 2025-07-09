@@ -3,605 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaleidoEye: A Large-scale Dataset and Benchmark for Slippage-Robust Gaze Tracking in HMDs</title>
+    <title>KaleidoEye: A Large-scale Dataset and Benchmark</title>
+
+    <!-- Favicon & Fonts -->
+    <link rel="icon" type="image/x-icon" href="https://lency-xx.github.io/Kaleidoeye/docs/figures/kaleidoeye.ico">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Noto+Sans:400,700&display=swap" rel="stylesheet">
+
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-
-    <title>KaleidoEye</title>
-      <link rel="icon" type="image/x-icon" href="https://lency-xx.github.io/Kaleidoeye/figures/kaleidoeye.ico">
-      <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-      rel="stylesheet">
-
+    <!-- Tailwind CSS Configuration -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        primary: '#165DFF',        // 主色调：深蓝色
-                        secondary: '#3B82F6',      // 辅助色：浅蓝色
-                        accent: '#F97316',         // 强调色：橙色
-                        dark: '#1E293B',           // 深色：深灰
-                        light: '#F8FAFC',          // 浅色：接近白色
-                        neutral: '#64748B',        // 中性色：中灰
-                    },
                     fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
+                        sans: ['Noto Sans', 'sans-serif'],
+                        google: ['Google Sans', 'sans-serif'],
                     },
                 }
             }
         }
     </script>
 
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .text-shadow {
-                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-            .hover-scale {
-                transition: transform 0.3s ease;
-            }
-            .hover-scale:hover {
-                transform: scale(1.03);
-            }
-            .animate-fade-in {
-                animation: fadeIn 0.8s ease-in-out;
-            }
-            .animate-slide-up {
-                animation: slideUp 0.8s ease-out;
-            }
-            .pill-button {
-                @apply px-6 py-2.5 bg-dark hover:bg-accent text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center text-sm;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            @keyframes slideUp {
-                from { transform: translateY(20px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-            /* 新增表格单元格内边距样式 */
-            .table-cell-padding {
-                @apply px-4 py-2.5;  /* 调整内边距减少行高 */
-            }
-            /* 表格行高调整 */
-            .table-row-height {
-                height: 50%;  /* 原高度的75% */
-            }
-        }
+    <!-- Custom Page Styles -->
+    <style>
+        body { color: #1f2937; }
+        .publication-title { font-family: 'Google Sans', sans-serif; font-weight: 500; color: #111827; line-height: 1.25; font-size: clamp(2rem, 5vw, 3.25rem); }
+        .gradient-text { background: linear-gradient(45deg, #165DFF, #A052E2, #F97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .publication-authors { font-size: 1.125rem; line-height: 1.7; }
+        .hero-button { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; background-color: #1f2937; color: white; border-radius: 9999px; font-size: 1rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease-in-out; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .hero-button:hover { background-color: #1d4ed8; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .hero-button .fa { margin-right: 0.75rem; }
+        .section-title { font-family: 'Google Sans', sans-serif; font-size: clamp(1.8rem, 4vw, 2.25rem); font-weight: 500; text-align: center; margin-bottom: 1.5rem; color: #111827; }
+        .subsection-title { font-family: 'Google Sans', sans-serif; font-size: 1.75rem; font-weight: 500; text-align: center; margin-bottom: 1.5rem; margin-top: 2rem; color: #111827; }
+        em.dnerf, .strong-keyword { color: #1d4ed8; font-weight: 500; }
+        em.dnerf { font-style: italic; }
+        .carousel-title { font-family: 'Google Sans', sans-serif; font-size: 1.5rem; font-weight: 500; text-align: center; margin-bottom: 1.5rem; color: #111827; }
+        .conclusion-points p { line-height: 1.6; }
+
+        /* === Carousel Base Styles === */
+        .swiper-slide { display: flex; flex-direction: column; background-color: white; height: auto; }
+        .slide-image-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 1rem; }
+        .slide-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; flex-shrink: 0; }
+        .slide-caption-area { padding: 1rem 1.25rem; text-align: justify; font-size: 0.95rem; line-height: 1.5; color: #4b5563; flex-shrink: 0; }
+        .swiper-button-prev-flex, .swiper-button-next-flex { flex-shrink: 0; cursor: pointer; width: 44px; height: 44px; background-color: white; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+        .swiper-button-prev-flex:hover, .swiper-button-next-flex:hover { transform: scale(1.05); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .swiper-button-prev-flex::after, .swiper-button-next-flex::after { content: ''; display: block; width: 24px; height: 24px; background-repeat: no-repeat; background-position: center; background-size: 16px; }
+        .swiper-button-prev-flex::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111827'%3E%3Cpath d='M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z'/%3E%3C/svg%3E"); }
+        .swiper-button-next-flex::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111827'%3E%3Cpath d='M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z'/%3E%3C/svg%3E"); }
+        .swiper-pagination { position: relative; text-align: center; width: 100% !important; }
+        .swiper-pagination-bullet { width: 8px; height: 8px; background-color: #000; opacity: 0.2; transition: all 0.2s ease; margin: 0 4px !important; }
+        .swiper-pagination-bullet-active { opacity: 1; transform: scale(1.4); }
     </style>
 </head>
-<body class="font-inter bg-light text-dark antialiased text-lg">
-    <!-- 导航栏 -->
-    <nav id="navbar" class="fixed w-full bg-white/90 backdrop-blur-md z-50 transition-all duration-300 shadow-sm">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-<!--                <span class="text-2xl"><i class="fa fa-cube text-primary"></i></span>-->
-                <span class="font-bold text-xl text-primary">KaleidoEye</span>
-            </div>
 
-            <div class="hidden md:flex space-x-8">
-                <a href="#abstract" class="font-medium hover:text-primary transition-colors">Abstract</a>
-                <a href="#dataset" class="font-medium hover:text-primary transition-colors">Data Collection</a>
-                <a href="#benchmark" class="font-medium hover:text-primary transition-colors">Benchmark</a>
-                <a href="#results" class="font-medium hover:text-primary transition-colors">Results</a>
-<!--                <a href="#Details" class="font-medium hover:text-primary transition-colors">Details</a>-->
-            </div>
-            <div class="md:hidden">
-                <button id="menu-toggle" class="text-dark focus:outline-none">
-                    <i class="fa fa-bars text-primary text-xl"></i>
-                </button>
-            </div>
-        </div>
-        <!-- 移动端菜单 -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg animate-fade-in">
-            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
-                <a href="#abstract" class="font-medium py-2 hover:text-primary transition-colors">Abstract</a>
-                <a href="#dataset" class="font-medium py-2 hover:text-primary transition-colors">Data Collection</a>
-                <a href="#benchmark" class="font-medium py-2 hover:text-primary transition-colors">Benchmark</a>
-                <a href="#results" class="font-medium py-2 hover:text-primary transition-colors">Results</a>
-<!--                <a href="#Details" class="font-medium py-2 hover:text-primary transition-colors">Details</a>-->
-            </div>
-        </div>
-    </nav>
 
-    <!-- 英雄区域 -->
-    <header class="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-primary/5 to-light">
-        <div class="container mx-auto px-4">
-            <div class="max-w-7xl mx-auto text-center">
-                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-dark mb-6 animate-fade-in">
-                    KaleidoEye: A Large-scale Dataset and Benchmark for Slippage-Robust Gaze Tracking in HMDs
-                </h1>
-                <p class="text-[clamp(1.1rem,2vw,1.3rem)] text-gray-600 mb-8 animate-slide-up">
-
-                </p>
-                <table align=center width=700px>
-                    <tr>
-                        <center>
-                            <span style="font-size:20px">Yingxi Li<sup>1</sup></span> &nbsp;&nbsp;&nbsp;
-                            <span style="font-size:20px">Xiaowei Bai<sup>2</sup></span> &nbsp;&nbsp;&nbsp;
-                            <span style="font-size:20px">Liang Xie<sup>2</sup></span> &nbsp;&nbsp;&nbsp;
-                            <span style="font-size:20px">Hao Su<sup>3</sup></span> &nbsp;
-                            <span style="font-size:20px">Zhuoru Li<sup>4</sup></span> &nbsp;&nbsp;&nbsp;
-                            <span style="font-size:20px">Feitian Zhang<sup>1</sup></span> &nbsp;&nbsp;&nbsp;
-                            <span style="font-size:20px">Ye Yan<sup>1, 2</sup></span> &nbsp;
-                            <span style="font-size:20px">Erwei Yin<sup>2</sup></span>
-                        </center>
-                    </tr>
-                </table>
-
-                <table align=center width=800px>
-                    <tr>
-                        <td align=center width=160px>
-                            <center>
-                                <span style="font-size:20px"><sup>1</sup>College of Engineering, Peking University</span> &nbsp;
-                                </br>
-                                <span style="font-size:20px"><sup>2</sup>Defense Innovation Institute, Academy of Military Sciences</span> &nbsp;
-                                </br>
-                                <span style="font-size:20px"><sup>3</sup>School of Computer and Artificial Intelligence, Zhengzhou University</span> &nbsp;
-                                </br>
-                                <span style="font-size:20px"><sup>4</sup>College of Intelligence and Computing, Tianjin University</span> &nbsp;
-<!--                                <span style="font-size:20px"><sup>5</sup>Nankai University</span>-->
-                            </center>
-                        </td>
-                    </tr>
-                </table>
-
-                <br>
-                <div class="flex flex-wrap justify-center gap-4 animate-slide-up" style="animation-delay: 0.4s;">
-                    <a href="BLANK" class="pill-button">
-                        <i class="fa fa-github text-white mr-2"></i> Code
-                    </a>
-                    <a href="BLANK" class="pill-button">
-                        <i class="fa fa-database text-white mr-2"></i> Dataset
-                    </a>
-                    <a href="BLANK" class="pill-button">
-                        <i class="fa fa-file-pdf-o text-white mr-2"></i> Supplementary materials
-                    </a>
-
+<body class="font-sans bg-white antialiased">
+    <!-- Header Section -->
+    <header class="pt-16 pb-8 md:pt-20 md:pb-12">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center">
+                <h1 class="publication-title mb-6"><span class="gradient-text">KaleidoEye</span>: A Large-scale Dataset and Benchmark for Slippage-Robust Gaze Tracking in HMDs</h1>
+                <div class="publication-authors text-gray-800 mb-4">
+                    <span class="font-semibold">Yingxi Li<sup>1</sup>,</span> <span class="font-semibold">Xiaowei Bai<sup>2</sup>,</span> <span class="font-semibold">Liang Xie<sup>2</sup>,</span> <span class="font-semibold">Hao Su<sup>3</sup>,</span> <span class="font-semibold">Zhuoru Li<sup>4</sup>,</span> <span class="font-semibold">Feitian Zhang<sup>1</sup>,</span> <span class="font-semibold">Ye Yan<sup>1, 2</sup>,</span> and <span class="font-semibold">Erwei Yin<sup>2</sup></span>
                 </div>
-                <br>
-                <br>
-
-
-<!--<div class="video-container mt-8 animate-fade-in" style="width: 90%; margin: 0 auto;">-->
-<!--    <video-->
-<!--        controls-->
-<!--        autoplay-->
-<!--        loop-->
-<!--        muted-->
-<!--        class="w-full rounded-lg shadow-lg"-->
-<!--        style="max-width: 100%; height: auto;">-->
-<!--        <source src="https://shirley0118.github.io/VIHand/demo.mp4" type="video/mp4">-->
-<!--        Your browser does not support the video tag.-->
-<!--    </video>-->
-<!--</div>-->
-
-        <!-- 第一张图片容器 -->
-<!--        <div style="width: 90%; margin: 0 auto;">-->
-<!--            <img src="https://lency-xx.github.io/Kaleidoeye/figures/Sample_imgs.png" alt="Dataset Overview"-->
-<!--                 class="w-full h-auto rounded-lg mt-8">-->
-<!--        </div>-->
-
-        <!-- 第二张图片和文字容器 -->
-        <div style="width: 90%; margin: 0 auto;">
-            <img src="https://lency-xx.github.io/Kaleidoeye/figures/Intro-3.jpg" alt="Dataset Overview"
-                 class="w-full h-auto rounded-lg mt-8">
-            <img src="https://lency-xx.github.io/Kaleidoeye/figures/Sample_imgs.png" alt="Dataset Overview"
-                 class="w-full h-auto rounded-lg mt-8">
-            <p class="mt-6 text-lg text-gray-700 text-justify leading-relaxed animate-fade-in" style="animation-delay: 0.6s;">
-                <strong>KaleidoEye</strong> is the first large-scale gaze-tracking dataset with quantifiable 6DoF slippage annotations (comprising 3DoF rotation and 3DoF translation between the headset and the user's head).
-                It includes over 1.75 million samples from 30 participants, providing synchronized binocular eye images, 2D/3D eyeball annotations, gaze coordinates, and 6DoF HMD poses.
-                By precisely varying headset poses using a robotic arm, we construct 11,130 slippage conditions, narrowing the domain gap between experimental settings and real-world usage.
-            </p>
-        </div>
-
-
-<!--                <div style="width: 90%; margin-left: 5%;">-->
-<!--                    <img src="https://lency-xx.github.io/Kaleidoeye/figures/est_gaze_overview.jpg" alt="Dataset Overview" class="w-full h-auto rounded-lg mt-8">-->
-<!--                    <p class="mt-6 text-lg text-gray-700 text-justify leading-relaxed animate-fade-in" style="animation-delay: 0.6s;">-->
-<!--                        VIHand is the first large-scale glove-worn dataset for visual-inertial hand pose estimation,-->
-<!--                        containing over 1.4 million synchronized RGB-D and IMU frames from 15 subjects.-->
-<!--                        It provides accurate frame-level 3D joint annotations across complex gestures,-->
-<!--                        enabling comprehensive research in HPE tasks, including multimodal fusion, cross-modal knowledge transfer and cross-modal data generation, etc.-->
-<!--                    </p>-->
-<!--                </div>-->
+                <div class="publication-authors text-gray-800 mb-8">
+                    <span><sup>1</sup>Peking University,</span> <span><sup>2</sup>Defense Innovation Institute, AMS,</span> <span><sup>3</sup>Zhengzhou University,</span> <span><sup>4</sup>Tianjin University</span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <a href="https://github.com/Lency-xx/Kaleidoeye" class="hero-button"><i class="fa fa-github fa-lg"></i> Code</a>
+                    <a href="BLANK" class="hero-button"><i class="fa fa-database fa-lg"></i> Dataset</a>
+                    <a href="BLANK" class="hero-button"><i class="fa fa-file-pdf-o fa-lg"></i> Paper</a>
+                    <!-- END: 新增的 Demo 按钮 -->
+                    <a href="https://youtu.be/BOVnBRc6y7Y" class="hero-button"><i class="fa fa-play-circle-o fa-lg"></i> Demo</a>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- 摘要部分 -->
-    <section id="abstract" class="py-12 scroll-mt-24">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-center">Abstract</h2>
-            <p class="text-xl text-gray-700 leading-relaxed mb-6 text-justify">
-           Egocentric gaze tracking is essential for immersive interaction in head-mounted displays (HMDs). However, existing end-to-end approaches primarily assume a fixed and tightly fitted headset placement, overlooking the inevitable HMD slippage under real-world conditions. Although some datasets with variable wearing postures have been proposed, the limited slippage amplitude and the unquantifiable postures cannot provide an impartial benchmark to evaluate slip-robust gaze-tracking algorithms. In this paper, we build KaleidoEye, the first large-scale gaze tracking dataset with quantified 6DoF slippage poses. It contains 1.75 million binocular images from 30 subjects, each annotated with 2D/3D eyeball annotations, and gaze coordinates. By covering 11,130 realistic slippage conditions, KaleidoEye captures extensive eye appearance distortions and gaze-space misalignments, providing a challenging benchmark for gaze-tracking algorithms. Furthermore, we propose EST-Gaze, a high-performance and slippage-robust gaze tracking model for resource-constrained devices. By leveraging edge-guided spatial transformations, it learns structural invariance in eye appearance under slip-induced distortions, effectively projecting distorted inputs onto a slippage-invariant subspace and simplifying the gaze mapping process. The evaluation results on KaleidoEye illustrate that EST-Gaze achieves an uncalibrated average error of 2.53$^\circ$ with minimal computational overhead, surpassing state-of-the-art methods.
-            </p>
+    <!-- Teaser Video Section -->
+    <section class="pt-0 pb-16">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="rounded-lg shadow-xl overflow-hidden"><video playsinline autoplay muted loop class="w-full h-auto"><source src="https://lency-xx.github.io/Kaleidoeye/docs/figures/start.mp4" type="video/mp4">Your browser does not support the video tag.</video></div>
+            <p class="mx-auto mt-8 text-lg text-gray-700 text-justify leading-relaxed"><strong>KaleidoEye</strong> is the first large-scale gaze-tracking dataset with quantifiable 6DoF slippage annotations (comprising 3DoF rotation and 3DoF translation between the headset and the user's head). It includes over 1.75 million samples from 30 participants, providing synchronized binocular eye images, 2D/3D eyeball annotations, gaze coordinates, and 6DoF HMD poses. By precisely varying headset poses using a robotic arm, we construct 11,130 slippage conditions, narrowing the domain gap between experimental settings and real-world usage.</p>
+        </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section id="abstract" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">Abstract</h2>
+            <div class="space-y-4 text-lg text-gray-800 leading-relaxed text-justify">
+                 <p>Egocentric gaze tracking is essential for immersive interaction on head-mounted displays (HMDs). However, existing studies typically assume a fixed and tightly fitted headset placement, overlooking the inevitable HMD slippage under real-world conditions. Although several datasets with variable wearing positions have been proposed, the lack of diverse and annotated slippage hinders slippage-robust gaze tracking research.</p>
+                <p>In this paper, we present <em class="dnerf"> <strong>KaleidoEye</strong></em>, the first large-scale gaze tracking dataset with precisely quantified <strong>6DoF</strong> slippage poses. It contains <strong>1.75 million</strong> binocular images from <strong>30 subjects</strong>, each annotated with eyeball parameters and gaze targets. By covering <strong>11,130</strong> slippage conditions, KaleidoEye captures extensive eye appearance distortions and gaze-space misalignments, enabling comprehensive studies of gaze-tracking under slippage.</p>
+                <p>Based on this dataset, we propose <em class="dnerf"><strong>EST-Gaze</strong></em>, a lightweight and slippage robust gaze-tracking model for resource-constrained devices. By leveraging edge-guided spatial transformations, EST-Gaze learns to transform distorted eye inputs into a canonical view, improving visual consistency and gaze tracking accuracy. Experimental results demonstrate that KaleidoEye significantly enhances the robustness of existing gaze-tracking models under headset slippage. Moreover, EST-Gaze achieves an uncalibrated average error of <strong>2.53°</strong> with real-time performance (<strong>40 FPS</strong> on HoloLens 2), outperforming state-of-the-art approaches.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction" class="py-12 bg-white">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">💡 Introduction</h2>
+            <div class="space-y-4 text-lg text-gray-800 leading-relaxed text-justify mb-16">
+                 <p>💫 KaleidoEye is the first large-scale gaze-tracking dataset specifically crafted to capture diverse HMD slippage, with precisely annotated 6DoF headset poses to bridge the domain gap in real-world scenarios.</p>
+                 <p>💫 Compared to existing datasets, KaleidoEye’s key advantages lie in the scale (over 1.75 million images) and its 11,130 robot-controlled slippage configurations, offering unprecedented coverage of headset displacements.</p>
+                 <p>💫 This not only enables rigorous benchmarking of slippage-resilient gaze tracking but also underpins models like EST-Gaze, which transform distorted eye images into a unified canonical space for enhanced tracking accuracy.</p>
+            </div>
+            <h3 class="subsection-title">📑 Existing Gaze Tracking Datasets</h3>
+            <div class="flex items-center justify-center space-x-4">
+                <div class="swiper-button-prev-flex"></div>
+                <div class="flex flex-col w-full">
+                    <div class="swiper-container rounded-lg overflow-hidden border border-gray-200">
+                        <div class="swiper-wrapper">
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/intro-1.jpg" alt="intro-1"></div><div class="slide-caption-area">In ideal scenarios (left), the headset maintains a fixed spatial relationship with the user’s head, ensuring stable gaze-camera geometry. In contrast, real-world usage (right) involves inevitable HMD slippage, leading to unpredictable changes in eye-camera alignment and gaze projection, which significantly impairs tracking accuracy.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/intro-2.jpg" alt="intro-2"></div><div class="slide-caption-area">Traditional model-based gaze tracking relies on geometric modeling (e.g., PCCR) and requires repeated, time-consuming calibration to maintain accuracy under varying conditions. In contrast, appearance-based methods predict gaze directly from eye images using end-to-end learning, offering better adaptability and user convenience. However, their performance is inherently driven by the diversity and scale of training data—only large-scale, slippage-aware datasets can unlock their full potential in real-world scenarios.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/intro-3.jpg" alt="intro-3"></div><div class="slide-caption-area">Most existing datasets (e.g., OpenEDS) are collected under fixed and tightly fitted headsets, lacking HMD slippage and quantitative variability. Gaze models trained on such data generalize poorly when faced with slippage-induced appearance shifts in the target domain, resulting in increased tracking error due to an unaddressed domain gap.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/intro-4.jpg" alt="intro-4"></div><div class="slide-caption-area">Datasets like PVEye introduce slight variations in headset placement, capturing limited slippage conditions. While they improve model generalization to some extent, the slippage is neither diverse nor quantitatively annotated, leaving models still vulnerable to unseen real-world displacements.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/intro-5.jpg" alt="intro-5"></div><div class="slide-caption-area">Unlike prior datasets, KaleidoEye captures diverse and precisely controlled slippage conditions using a robotic platform, providing quantifiable supervision for model learning. This not only enhances slippage robustness and reduces domain gap but also facilitates interpretable modeling of gaze behavior in real-world AR/VR scenarios.</div></div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination mt-4"></div>
+                </div>
+                <div class="swiper-button-next-flex"></div>
+            </div>
         </div>
     </section>
 
 
+    <!-- Data Collection Section (HTML Structure Corrected) -->
+    <section id="data-collection" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">🔬 Data Collection</h2>
+            <!-- Introductory Points are now correctly structured -->
+            <div class="space-y-4 text-lg text-gray-800 leading-snug text-justify mb-10">
+                <p>🛠️ To address the challenge of HMD slippage, we designed a novel data acquisition platform powered by a precision robotic arm, ensuring both repeatability and fine-grained annotation.</p>
+                <p>📷 The carousel below illustrates our full pipeline, from the hardware setup to the variety of data captured, highlighting what makes KaleidoEye a unique and comprehensive resource.</p>
+            </div>
+            
+            <!-- Carousel for Data Collection -->
+            <div class="flex items-center justify-center space-x-4">
+                <div class="swiper-button-prev-flex"></div>
+                <div class="flex flex-col w-full">
+                    <div class="swiper-container rounded-lg overflow-hidden border border-gray-200">
+                        <div class="swiper-wrapper">
+                            <!-- Slide 1 -->
+                            <div class="swiper-slide">
+                                <div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/data-1.png" alt="Protocol Overview"></div>
+                                <div class="slide-caption-area">
+                                    <strong>Protocol Overview:</strong> (a) Robotic arm controls slippage. (b) Joint calibration for accurate labels. (c) Diverse slippage paradigms. (d) Synchronized multi-modal data output.
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="swiper-slide">
+                                <div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/data-2.jpg" alt="Data Acquisition Platform"></div>
+                                <div class="slide-caption-area">
+                                    <strong>Acquisition Platform:</strong> A 6DoF robotic arm, HoloLens 2, and a custom head stabilization frame are integrated to simulate diverse slippage conditions under fixed-head scenarios.
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="swiper-slide">
+                                <div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/data-3.png" alt="Dataset Comparison"></div>
+                                <div class="slide-caption-area">
+                                    <strong>Dataset Comparison:</strong> KaleidoEye provides extensive, quantifiable slippage annotations across 11,130 poses, filling a critical gap left by existing datasets.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination mt-4"></div>
+                </div>
+                <div class="swiper-button-next-flex"></div>
+            </div>
+        </div>
+    </section>
 
-    <section id="dataset" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Data Collection</h2>
-            <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
-                <p class="text-gray-700 mb-4 text-lg text-justify">Overview of the KaleidoEye data collection protocol. (a) A robotic arm controll HMD slippage while the subject's head remains fixed. (b) HoloLens and Pupil Core are jointly calibrated to obtain accurate gaze labels and 2D/3D annotations. (c) Slippage is executed under three types (RA-RC) and paired with diverse stimulus paradigms (PA-PC). (d) The dataset includes synchronized eye images, slippage postures, gaze targets, and dense annotations.
+    <!-- Benchmark Methodology Section -->
+    <section id="benchmark" class="py-12 bg-white">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">✨ Benchmark Methodology</h2>
+            <div class="space-y-4 text-lg text-gray-800 leading-snug text-justify mb-10">
+                <p>⚠️ Real-time gaze tracking on HMDs requires balancing accuracy and efficiency. While high-performance models are too computationally heavy for embedded use, lightweight models often fail to adapt to appearance distortions caused by HMD slippage.</p>
+                <p>🗝️ We introduce <strong class="strong-keyword">EST-Gaze</strong>, a high-performance and lightweight framework tailored for real-time gaze tracking on HMDs under slippage conditions.</p>
+                <p>🗝️ Unlike conventional lightweight models that struggle with appearance distortions, EST-Gaze leverages edge-based geometric cues to guide spatial transformation and image rectification.</p>
+                <p>🗝️ This slippage-aware correction enables the network to align distorted eye images to a canonical view, significantly improving gaze accuracy with minimal computational overhead.</p>
+            </div>
+            <div class="rounded-lg overflow-hidden border border-gray-200 bg-white">
+                <img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/method-1.jpg" alt="EST-Gaze Framework Architecture Diagram" class="w-full h-auto">
+            </div>
+            <p class="text-justify text-gray-600 text-base mt-4">Overview of the proposed EST-Gaze framework for slippage-robust gaze tracking. Given an eye image, we first extract a corresponding edge image using a multi-stage pipeline. Both the eye image and edge image are processed by separate encoders to produce feature maps, which are fused via a spatial attention module to generate edge weights that modulate the eye features. A pose-aware affine MLP estimates the transformation parameters, which are used by a grid sampler to produce a spatially aligned image. The aligned image is then forwarded to a gaze tracking network for prediction. By incorporating pose as an explicit modulation signal, EST-Gaze enhances the interpretability of affine transformation and captures the headset displacements.</p>
+        </div>
+    </section>
 
-                </p>
-                <div class="overflow-hidden rounded-lg">
-                    <img src="https://lency-xx.github.io//Kaleidoeye/figures/data_collection.jpg" alt="data collection overview" class="w-full h-auto object-cover rounded-lg">
+    <!-- Experiments Section -->
+    <section id="experiments" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">📊 Comprehensive Evaluation of KaleidoEye</h2>
+            <!-- Evaluation Metrics Subsection -->
+            <div id="evaluation-metrics">
+                <h3 class="subsection-title">📏 Evaluation Metrics</h3>
+                <p class="text-lg text-gray-800 leading-relaxed text-justify mb-8">We assess gaze tracking performance using the <strong>mean angular error (MAE)</strong>, a standard metric that measures the average angular difference (in degrees) between predicted and ground-truth gaze vectors. A lower MAE indicates more accurate gaze tracking, with values closer to zero representing better performance. To ensure fair and comprehensive benchmarking, we use two representative backbone networks: <strong>NVGaze</strong>, a lightweight model optimized for efficiency, and <strong>ResNet-18</strong>, a widely adopted baseline for appearance-based gaze tracking.</p>
+            </div>
+            <!-- Results Subsection with Carousel -->
+            <div id="results-carousel-container" class="mt-16">
+                <h3 class="subsection-title">📈 Results</h3>
+                <!-- <p class="text-lg text-gray-800 leading-relaxed text-justify mb-10">Qualitative results visually demonstrate our method's effectiveness across the pipeline, from detection to final error analysis.</p> -->
+                <div class="flex items-center justify-center space-x-4">
+                    <div class="swiper-button-prev-flex"></div>
+                    <div class="flex flex-col w-full">
+                        <div class="swiper-container rounded-lg overflow-hidden border border-gray-200">
+                            <div class="swiper-wrapper">
+                                 <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-1.png" alt="Pupil Detection"></div><div class="slide-caption-area">The upper table summarizes key properties of four widely used gaze datasets, including participant count, annotation volume, and collection settings. The lower table presents the MAE of two representative models evaluated across all datasets. Thanks to its fine-grained split, KaleidoEye enables detailed testing under both ideal and slippage scenarios, revealing each model’s true robustness and generalization ability in real-world conditions.</div></div>
+                                 <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-2.png" alt="Edge Detection"></div><div class="slide-caption-area">Fine-grained slippage-level evaluation with the KaleidoEye dataset. The upper table defines four slippage subsets (No Slip, Light Slip, Moderate Slip, and Heavy Slip) based on headset rotation and translation, enabling precise categorization of real-world slippage. The lower table reports MAE across all levels for baseline models. Models perform best when trained and tested on the same subset, confirming distinct feature distributions at each slippage level. Still, performance degrades as slippage severity increases, underscoring the challenge of modeling large geometric distortions. These results validate the significant domain gaps caused by slippage and demonstrate the utility of KaleidoEye’s structured subset design for robust, targeted evaluation.</div></div>
+                                 <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-3.png" alt="Slippage Correction"></div><div class="slide-caption-area">Impact of real slippage diversity on model performance. The upper table describes how four training sets are constructed by progressively adding light, moderate, and heavy-slippage samples to a no-slip baseline, while keeping the total number of frames fixed (123,775) for fair comparison. The lower table reports MAE on a full slippage test set for two models. As more real slippage is included in training, both NVGaze and ResNet-18 show consistent improvements, with ResNet-18 achieving the best accuracy (3.05°) when trained with the full slippage spectrum. These results highlight the importance of real slippage supervision in learning to handle complex appearance deformations caused by HMD displacement.</div></div>
+                                 <!-- <div class="swiper-slide"><div class="slide-image-container"><img src="figures/exp-3.png" alt="Error Comparison"></div><div class="slide-caption-area"><strong>Angular Error Comparison:</strong> EST-Gaze (green) reduces bias and outliers.</div></div> -->
+                            </div>
+                        </div>
+                        <div class="swiper-pagination mt-4"></div>
+                    </div>
+                    <div class="swiper-button-next-flex"></div>
                 </div>
             </div>
         </div>
     </section>
 
-
-<!--    <section id="dataset" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">-->
-<!--        <div class="max-w-6xl mx-auto">-->
-<!--            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Dataset Samples</h2>-->
-<!--            <div class="mt-12 bg-white rounded-xl shadow-lg p-6">-->
-<!--                <p class="text-gray-700 mb-4 text-lg text-justify">Representative samples from the KaleidoEye dataset. Each row depicts a synchronized binocular frame, with the first four columns corresponding to the left eye and the latter four to the right eye. For each eye, we visualize (1) the raw NIR image, (2) pupil detection results with the fitted ellipse and center point, (3) a binary pupil segmentation mask, and (4) projected 3D eyeball, including the gaze vector (yellow), pupil ellipse (red), and iris contour (cyan).-->
-
-<!--                </p>-->
-<!--                <div class="overflow-hidden rounded-lg">-->
-<!--                    <img src="https://lency-xx.github.io/Kaleidoeye/figures/Sample_imgs.png" alt="dataset samples" class="w-full h-auto object-cover rounded-lg">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
+    <!-- Model Evaluation Section with Carousel -->
+    <section id="model-evaluation" class="py-12 bg-white">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">📊 Model Evaluation on KaleidoEye</h2>
 
 
-    <!-- 方法部分 -->
-    <section id="benchmark" class="py-12 scroll-mt-24 bg-gray-50 rounded-2xl">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Benchmark</h2>
-            <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
-                <p class="text-gray-700 mb-4 text-lg text-justify">Overview of the proposed EST-Gaze framework for slippage-robust gaze tracking. Given an eye image, we first extract a corresponding edge image using a multi-stage pipeline. Both the eye image and edge image are processed by separate encoders to produce feature maps $F_{\text{eye}}$ and $F_{\text{edge}}$, which are fused via a spatial attention module to generate edge weights that modulate the eye features. A pose-aware affine MLP estimates the transformation parameters $\theta$, which are used by a grid sampler to produce a spatially aligned image. The aligned image is then forwarded to an existing gaze tracking network for prediction. The entire framework is supervised by the predicted PoG and leverages both visual and geometric signals to mitigate HMD slippage.</p>
-                <div class="overflow-hidden rounded-lg">
-                    <img src="https://lency-xx.github.io/Kaleidoeye/figures/est_gaze_overview.jpg" alt="Est_gaze_overview Architecture Diagram" class="w-full h-auto object-cover rounded-lg">
+            <!-- Evaluation Metrics Subsection -->
+            <div id="evaluation-metrics">
+                <h3 class="subsection-title">📏 Evaluation Metrics</h3>
+                <p class="text-lg text-gray-800 leading-relaxed text-justify mb-8">To comprehensively evaluate gaze tracking performance under varying slippage conditions, we define a set of robust metrics that jointly measure accuracy, and efficiency. Specifically, we use <strong>Mean Angular Error (MAE)</strong> to assess prediction accuracy by quantifying the angular deviation between predicted and ground-truth 3D gaze vectors—lower values indicate better precision. <strong>Parameter count (Params)</strong> reflects model size and is critical for evaluating lightweight deployment potential. <strong>FLOPs</strong> (floating-point operations) estimate the computational cost of a forward pass and serve as an indicator of inference efficiency. Together, these metrics provide a balanced view of model robustness, accuracy, and practical usability in real-world AR/VR scenarios.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-200 bg-white">
+                    <img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-5.png" alt="Placeholder for Evaluation Metrics Diagram">
                 </div>
+                <!-- <p class="text-center text-gray-600 text-base mt-4">Placeholder caption for the evaluation metrics figure.</p> -->
             </div>
-        </div>
-    </section>
-
-    <!-- 结果部分 -->
-    <section id="results" class="py-12 scroll-mt-24">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Results</h2>
-            <div class="grid grid-cols-1 gap-6 mb-10">
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale">
-                    <div class="p-6">
-                        <p class="text-gray-700 mb-4 text-lg text-justify"> Visual comparison between our proposed pupil center detection method (top row, green ellipses) and the Pupil Labs ground-truth annotations (bottom row, blue ellipses). Each group represents 3 representative samples from one of 6 subjects. Our method demonstrates strong alignment with the annotated pupil contours under various conditions including gaze shift, occlusion, and illumination changes.</p>
-                        <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/pupil.png" alt="Qualitative Result 1" class="rounded-lg w-full h-auto">
-                        </p>
-<!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
-                        <div class="h-5">
-                            <canvas id="benchmarkChart"></canvas>
+            
+            <!-- Results Subsection with Carousel -->
+            <h3 class="subsection-title">📈 Results</h3>
+            <p class="text-lg text-gray-800 leading-relaxed text-justify mb-10">We benchmarked SOTA models against EST-Gaze to assess performance and robustness under slippage. The carousel presents our key quantitative results, demonstrating significant improvements.</p>
+            <div class="flex items-center justify-center space-x-4">
+                <div class="swiper-button-prev-flex"></div>
+                <div class="flex flex-col w-full">
+                    <div class="swiper-container rounded-lg overflow-hidden border border-gray-200">
+                        <div class="swiper-wrapper">
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-6.png" alt="Result 1"></div><div class="slide-caption-area">Accuracy and efficiency benchmarking of representative gaze tracking models on the KaleidoEye dataset. Model-based methods require calibration and show significant performance drops under slippage. Among appearance-based models, EST-Gaze achieves the best MAE on the no-slippage subset and competitive accuracy under slippage, while being significantly more efficient than heavier models like DilatedNet, GazeTR, and ResNet-18. These results highlight EST-Gaze's strong balance between robustness, precision, and real-time performance.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-7.png" alt="Result 2"></div><div class="slide-caption-area">Component analysis and plug-in evaluation of the EST-Gaze framework. The left table shows ablation results, revealing that each module—Spatial Transformer Network (STN), Edge Modulator (EM), and Pose Branch (PB)—contributes incrementally to performance, with the full EST-Gaze achieving the lowest MAE on both no-slip and slippage subsets. The right table evaluates the effectiveness of plugging EST into existing gaze tracking models. Across both lightweight and heavyweight architectures, EST consistently reduces angular error—up to 58.65% on no-slip and 50.58% on slippage data—while incurring modest overhead in parameters and FLOPs. These results highlight the modularity and general applicability of EST as a lightweight enhancement for robust gaze tracking under HMD slippage.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-8.png" alt="Result 4"></div><div class="slide-caption-area">t-SNE visualization of gaze feature distributions under different training conditions. (a) Model trained without slippage data shows clear clustering and separation between source domain and slippage-affected target domain, indicating poor generalization. (b) Model trained with slippage data exhibits well-aligned distributions across these subsets, demonstrating improved domain continuity and feature consistency.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-9.png" alt="Result 5"></div><div class="slide-caption-area">t-SNE visualization of gaze feature distributions with and without the EST module. (a) Without EST, features from the slippage domain exhibit clear misalignment with those from the training domain, forming separate clusters in multiple regions (highlighted in green). (b) With EST, feature distributions from three subsets become better aligned and more compact, indicating improved slippage robustness and domain consistency.</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-10.png" alt="Result 6"></div><div class="slide-caption-area">Runtime efficiency and accuracy comparison of gaze estimation models on HoloLens2. Left: Inference-time stability over 100 runs measured by FPS (Frames Per Second). Right: Trade-off between angular error and inference speed. EST-Gaze achieves a stable real-time speed of 40 FPS while maintaining high accuracy, positioning itself in the optimal region of the accuracy–efficiency spectrum. In contrast, models such as DilatedNet and GazeTR are accurate but too slow for practical use, while lightweight models like NVGaze and E-Tracker are fast but less robust under slippage..</div></div>
+                             <div class="swiper-slide"><div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/exp-11.png" alt="Result 8"></div><div class="slide-caption-area">Qualitative results of slippage correction using the proposed EST module. Top: Input eye images under slippage, showing misalignment and geometric distortion (e.g., eyelid deformation, pupil shift). Middle: Corrected outputs after applying EST, showing improved alignment with reference structure. Bottom: Reference eye images from non-slippage conditions. Blue dashed lines indicate reference positions from non-slippage images, highlighting the improvement in spatial consistency after correction.</div></div>
                         </div>
                     </div>
-
-                    <div class="p-6">
-                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results of Canny edge detection on adaptively extracted ROIs. Each block shows the original grayscale eye image (top) and the corresponding edge map (bottom). Our non-learning pipeline consistently captures key anatomical structures such as eyelid and pupil contours, enabling intuitive visualization of appearance shifts caused by HMD slippage.</p>
-                        <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/edge.png" alt="Qualitative Result 2" class="rounded-lg w-full h-auto">
-                        </p>
-<!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
-                        <div class="h-5">
-                            <canvas id="benchmarkChart1"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="p-6">
-                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative comparison of slippage correction using the proposed EST module. The top row shows original eye images under slippage, exhibiting geometric distortions such as eyelid deformation. The middle row presents the aligned outputs after applying EST. The bottom row displays non-slippage reference samples for comparison. Green dashed lines indicate key structural regions, highlighting the improvement in spatial consistency after correction.</p>
-                        <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/qualitative_est.png" alt="Qualitative Result 3" class="rounded-lg w-full h-auto">
-                        </p>
-<!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
-                        <div class="h-5">
-                            <canvas id="benchmarkChart3"></canvas>
-                        </div>
-                    </div>
-
-
-                    <div class="p-6">
-                        <p class="text-gray-700 mb-4 text-lg text-justify"> Subject-wise angular error comparisons across six slippage sessions. Red points indicate the baseline NVGaze error, and green points show the results with EST-Gaze. Horizontal lines mark the mean error per method. EST consistently reduces prediction bias and suppresses high-error outliers under slippage conditions.</p>
-                        <p class="text-gray-700 mb-4">
-                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/nvgaze&estgaze-points.png" alt="Qualitative Result 4" class="rounded-lg w-full h-auto">
-                        </p>
-<!--                        <p class="text-gray-700 mb-4 text-lg text-justify"> Qualitative results validate that our VIFNet produces much better results than previous methods on VIHand.</p>-->
-                        <div class="h-5">
-                            <canvas id="benchmarkChart4"></canvas>
-                        </div>
-                    </div>
-
+                    <div class="swiper-pagination mt-4"></div>
                 </div>
-            </div>
-        </div>
-
-
-
-    </section>
-
-
-<!-- End Experiments -->
-
-    <!-- Dataset Directory Structure -->
-    <section id="Details" class="py-12 scroll-mt-24 bg-gray-100 rounded-2xl">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-center">Dataset Directory Structure</h2>
-            <div class="bg-white p-6 rounded-lg shadow-md overflow-x-auto">
-                <pre class="text-lg font-mono leading-relaxed">
-            ${ROOT}
-            ├── KaleidoEye
-            │   ├── Slippage
-            │   │   ├── subject1 ~ subject30                    # 30 subjects
-            │   │   │   ├── train                               # train subset: 11 sessions
-            │   │   │   │   ├── 005 ~ 008, 010, 011, 013, 014   # slippage session
-            │   │   │   │   │  ├── eye0                         # Right eye
-            │   │   │   │   │  ├── eye1                         # Left eye
-            │   │   │   │   │  └── aligned_data.csv             # Annotations
-            │   │   │   │   │...
-            │   │   │   │...
-            │   │   │   ├── test                                # test subset: 3 sessions
-            │   │   │   │   ├──  004, 009, 012                  # slippage session
-            │   │   │   │   │  ├── eye0                         # Right eye
-            │   │   │   │   │  ├── eye1                         # Left eye
-            │   │   │   │   │  └── aligned_data.csv             # Annotations
-            │   │   │   │   │...
-            │   │   │   │...
-            │   │   │...
-            │   │...
-            ├── Non-Slippage
-            │   ├── subject1 ~ subject30
-            │   │   ├── subject1 ~ subject30                    # 30 subjects
-            │   │   │   ├── train                               # train subset: 3 sessions
-            │   │   │   │   ├── 001 ~ 003                       # Non-slippage session
-            │   │   │   │   │  ├── eye0                         # Right eye
-            │   │   │   │   │  ├── eye1                         # Left eye
-            │   │   │   │   │  └── aligned_data.csv             # Annotations
-            │   │   │   │   │...
-            │   │   │   │...
-            │   │   │   ├── test                                # 30 subjects
-            │   │   │   │   ├──  000                            # test subset: 1 session
-            │   │   │   │   │  ├── eye0                         # Right eye
-            │   │   │   │   │  ├── eye1                         # Left eye
-            │   │   │   │   │  └── aligned_data.csv             # Annotations
-            │   │   │   │   └────
-            │   │   │   └────
-            │   │   │...
-                </pre>
-            </div>
-            <div class="note mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md">
-                <p class="text-lg">
-                    Note: The above directory structure is a representation of how the dataset is organized. Each directory and file serves a specific purpose in the dataset's organization.
-                </p>
+                <div class="swiper-button-next-flex"></div>
             </div>
         </div>
     </section>
 
-<!--    &lt;!&ndash; Dataset Details &ndash;&gt;-->
-<!--    <section class="py-12 scroll-mt-24">-->
-<!--        <div class="max-w-7xl mx-auto px-4">-->
-<!--            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-10 text-center">Dataset Details</h2>-->
-<!--            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">-->
-<!--                &lt;!&ndash; 左侧列：两个表格 &ndash;&gt;-->
-<!--                <div class="space-y-8">-->
-<!--                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">-->
-<!--                        <div class="p-6 border-b border-gray-200">-->
-<!--                            <h3 class="text-xl font-bold text-center">Frame Distribution by Category</h3> &lt;!&ndash; 标题居中 &ndash;&gt;-->
-<!--                        </div>-->
-<!--                        <div class="overflow-x-auto">-->
-<!--                            <table class="w-full table-row-height"> &lt;!&ndash; 应用行高调整 &ndash;&gt;-->
-<!--                                <thead>-->
-<!--                                    <tr class="bg-gray-50">-->
-<!--                                        <th class="table-cell-padding text-left" style="width: 60%;">Category</th>-->
-<!--                                        <th class="table-cell-padding text-left" style="width: 40%;">Total Frames</th>-->
-<!--                                    </tr>-->
-<!--                                </thead>-->
-<!--                                <tbody class="bg-white divide-y divide-gray-200">-->
-<!--                                    <tr>-->
-<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Train Set</div></td>-->
-<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold gradient-bg inline-block px-2 py-0.5 rounded">1.06M</div></td>-->
-<!--                                    </tr>-->
-<!--                                    &lt;!&ndash; 删除了Validation Set行 &ndash;&gt;-->
-<!--                                    <tr>-->
-<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-gray-900">Test Set</div></td>-->
-<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold bg-gray-200 text-gray-900 inline-block px-2 py-0.5 rounded">340K</div></td> &lt;!&ndash; 取消红色背景 &ndash;&gt;-->
-<!--                                    </tr>-->
-<!--                                    <tr class="bg-gradient-to-r from-blue-500 to-purple-600">-->
-<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">Total</div></td>-->
-<!--                                        <td class="table-cell-padding"><div class="text-lg font-bold text-white">1.4M</div></td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                    </div>-->
+    <!-- Conclusion Section -->
+    <section id="conclusion" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">🎬 Conclusion</h2>
+            <div class="conclusion-points space-y-6 text-xl text-gray-800 text-justify">
+                <p>💥 We introduce <strong class="strong-keyword">KaleidoEye</strong>, the first large-scale dataset with <strong>1.75M</strong> binocular samples across <strong>11,130</strong> quantified 6DoF slippage conditions for near-eye gaze tracking.</p>
+                <p>💪 We present <strong class="strong-keyword">EST-Gaze</strong>, a lightweight and interpretable framework that leverages edge-guided spatial transformations to normalize slippage-induced distortions.</p>
+                <p>🧩  EST-Gaze is designed as a plug-and-play module and improves slippage robustness by an average of <strong>34%</strong> across diverse models—without sacrificing efficiency.</p>
+                <p>🔍 Our findings highlight a key insight: achieving real-world robustness requires both <strong>diverse slippage data</strong> and <strong>architecture-aware structural alignment</strong>.</p>
+            </div>
+        </div>
+    </section>
 
-<!--                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">-->
-<!--&lt;!&ndash;                        <div class="p-6 border-b border-gray-200">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <h3 class="text-xl font-bold text-center">Subject Information</h3> &lt;!&ndash; 标题居中 &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--                        <div class="overflow-x-auto">-->
-<!--                            <table class="w-full table-row-height"> &lt;!&ndash; 应用行高调整 &ndash;&gt;-->
-<!--                                <thead>-->
-<!--                                    <tr class="bg-gray-50">-->
-<!--                                        <th class="table-cell-padding text-left" style="width: 60%;">Subject ID</th>-->
-<!--                                        <th class="table-cell-padding text-left" style="width: 40%;">Gender</th>-->
-<!--                                    </tr>-->
-<!--                                </thead>-->
-<!--                                <tbody class="bg-white divide-y divide-gray-200" id="subjectTable">-->
-<!--                                    &lt;!&ndash; 动态生成的内容 &ndash;&gt;-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; 右侧列：长图片 &ndash;&gt;-->
-<!--                <div>-->
-<!--                    <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col">-->
-<!--                        <div class="p-6 border-b border-gray-200">-->
-<!--                            <h3 class="text-xl font-bold text-center">Data Sample</h3> &lt;!&ndash; 标题居中 &ndash;&gt;-->
-<!--                        </div>-->
-<!--                        <div class="flex-grow flex items-center justify-center p-6">-->
-<!--                            <img src="https://lency-xx.github.io/Kaleidoeye/figures/slippage_pupil.png" alt="Data Sample" class="w-full table-row-height">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
-
-<!--     <div class="bg-white rounded-xl shadow-lg p-6 max-w-6xl mx-auto"> -->
-<!--         <h3 class="text-xl font-semibold mb-4">Related Works</h3> -->
-<!--         <ul class="space-y-4"> -->
-<!--             <li class="flex items-start"> -->
-<!--                 <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0"> -->
-<!--                     <i class="fa fa-file-text-o text-primary"></i> -->
-<!--                 </div> -->
-<!--                 <div> -->
-<!--                     <a href="#" class="font-medium hover:text-primary transition-colors">A Dual-Branch Self-Boosting Framework for Self-Supervised 3D Hand Pose Estimation</a> -->
-<!--                     <p class="text-gray-600 text-sm">Pengfei Ren et al.,TIP 2022</p> -->
-<!--                 </div> -->
-<!--             </li> -->
-<!--             <li class="flex items-start"> -->
-<!--                 <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0"> -->
-<!--                     <i class="fa fa-file-text-o text-primary"></i> -->
-<!--                 </div> -->
-<!--                 <div> -->
-<!--                     <a href="#" class="font-medium hover:text-primary transition-colors">Mining multi-view information: a strong self-supervised framework for depth-based 3D hand pose and mesh estimation</a> -->
-<!--                     <p class="text-gray-600 text-sm">Pengfei Ren et al.,CVPR 2022</p> -->
-<!--                 </div> -->
-<!--             </li> -->
-<!--             <li class="flex items-start"> -->
-<!--                 <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0"> -->
-<!--                     <i class="fa fa-file-text-o text-primary"></i> -->
-<!--                 </div> -->
-<!--                 <div> -->
-<!--                     <a href="#" class="font-medium hover:text-primary transition-colors">Embodied Hands: Modeling and Capturing Hands and Bodies Together</a> -->
-<!--                     <p class="text-gray-600 text-sm">Javier Romero et al.,TOG 2017</p> -->
-<!--                 </div> -->
-<!--             </li> -->
-<!--         </ul> -->
-<!--     </div> -->
-
-<!--     Acknowledgments部分 -->
-    <section id="acknowledgments" class="py-12 scroll-mt-24">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-8 text-center">Acknowledgments</h2>
-            <p class="text-gray-700 text-justify">
+    <!-- Acknowledgments Section -->
+    <section id="acknowledgments" class="py-12 bg-white">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="section-title">🙏 Acknowledgments</h2>
+            <p class="text-lg text-gray-700 text-justify leading-relaxed">
                 This work was supported in part by the grants from the National Natural Science Foundation of China under Grant 62332019, the National Key Research and Development Program of China (2023YFF1203900, 2023YFF1203903), Sponsored by Beijing Nova Program (20240484513).
             </p>
         </div>
     </section>
 
+    <!-- Swiper.js script library -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Swiper Initializer Script -->
     <script>
-        // 导航栏滚动效果
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('py-2', 'shadow-md');
-                navbar.classList.remove('py-3', 'shadow-sm');
-            } else {
-                navbar.classList.add('py-3', 'shadow-sm');
-                navbar.classList.remove('py-2', 'shadow-md');
-            }
-        });
-
-        // 移动端菜单切换
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-
-                    // 关闭移动端菜单
-                    document.getElementById('mobile-menu').classList.add('hidden');
-                }
-            });
-        });
-
-        // 生成受试者表格内容
         document.addEventListener('DOMContentLoaded', () => {
-            const table = document.getElementById('subjectTable');
-            const subjects = [
-                { id: 'subject1', gender: 'Male' },
-                { id: 'subject2', gender: 'Female' },
-                { id: 'subject3', gender: 'Male' },
-                { id: 'subject4', gender: 'Male' },
-                { id: 'subject5', gender: 'Female' },
-                { id: 'subject6', gender: 'Male' },
-                { id: 'subject7', gender: 'Male' },
-                { id: 'subject8', gender: 'Male' },
-                { id: 'subject9', gender: 'Male' },
-                { id: 'subject10', gender: 'Male' },
-                { id: 'subject11', gender: 'Female' },
-                { id: 'subject12', gender: 'Female' },
-                { id: 'subject13', gender: 'Female' },
-                { id: 'subject14', gender: 'Male' },
-                { id: 'subject15', gender: 'Male' },
-                { id: 'subject16', gender: 'Female' },
-                { id: 'subject17', gender: 'Male' },
-                { id: 'subject18', gender: 'Male' },
-                { id: 'subject19', gender: 'Male' },
-                { id: 'subject20', gender: 'Male' },
-                { id: 'subject21', gender: 'Male' },
-                { id: 'subject22', gender: 'Female' },
-                { id: 'subject23', gender: 'Female' },
-                { id: 'subject24', gender: 'Male' },
-                { id: 'subject25', gender: 'Female' },
-                { id: 'subject26', gender: 'Male' },
-                { id: 'subject27', gender: 'Male' },
-                { id: 'subject28', gender: 'Male' },
-                { id: 'subject29', gender: 'Male' },
-                { id: 'subject30', gender: 'Female' }
-            ];
+            function initSwiper(selector, options = {}) {
+                new Swiper(selector + ' .swiper-container', {
+                    loop: true,
+                    autoplay: { delay: 5000 + (Math.random() * 500), disableOnInteraction: false },
+                    pagination: { el: selector + ' .swiper-pagination', clickable: true },
+                    navigation: { nextEl: selector + ' .swiper-button-next-flex', prevEl: selector + ' .swiper-button-prev-flex' },
+                    autoHeight: true,
+                    ...options // Merge custom options
+                });
+            }
 
-            subjects.forEach(subject => {
-                const row = document.createElement('tr');
-                row.className = 'h-8';  /* 固定行高 */
-
-                const idCell = document.createElement('td');
-                idCell.className = 'table-cell-padding whitespace-nowrap';
-                idCell.innerHTML = `<div class="text-sm font-medium ${subject.gender === 'Female' ? 'text-pink-900' : 'text-blue-900'}">${subject.id}</div>`;
-
-                const genderCell = document.createElement('td');
-                genderCell.className = 'table-cell-padding whitespace-nowrap';
-                genderCell.innerHTML = `
-                    <div class="flex items-center">
-                        <span class="w-2.5 h-2.5 rounded-full mr-1.5 ${subject.gender === 'Female' ? 'bg-pink-600' : 'bg-blue-600'}"></span>
-                        <span class="text-sm font-medium ${subject.gender === 'Female' ? 'text-pink-900' : 'text-blue-900'}">${subject.gender}</span>
-                    </div>
-                `;
-
-                row.appendChild(idCell);
-                row.appendChild(genderCell);
-                table.appendChild(row);
-            });
+            initSwiper('#introduction');
+            initSwiper('#data-collection');
+            initSwiper('#results-carousel-container');
+            initSwiper('#model-evaluation');
         });
     </script>
 </body>
