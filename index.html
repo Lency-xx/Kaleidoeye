@@ -83,7 +83,6 @@
         </div>
     </header>
 
-
     <!-- Teaser Video Section -->
     <section class="pt-0 pb-16">
         <div class="container mx-auto px-6 max-w-5xl">
@@ -108,7 +107,7 @@
     <section id="introduction" class="py-12 bg-white">
         <div class="container mx-auto px-6 max-w-5xl">
             <h2 class="section-title">💡 Introduction</h2>
-            <div class="space-y-4 text-lg text-gray-800 leading-relaxed text-justify mb-16">
+            <div class="space-y-4 text-xl text-gray-800 leading-relaxed text-justify mb-16">
                  <p>💫 KaleidoEye is the first large-scale gaze-tracking dataset specifically crafted to capture diverse HMD slippage, with precisely annotated 6DoF headset poses to bridge the domain gap in real-world scenarios.</p>
                  <p>💫 Compared to existing datasets, KaleidoEye’s key advantages lie in the scale (over 1.75 million images) and its 11,130 robot-controlled slippage configurations, offering unprecedented coverage of headset displacements.</p>
                  <p>💫 This not only enables rigorous benchmarking of slippage-resilient gaze tracking but also underpins models like EST-Gaze, which transform distorted eye images into a unified canonical space for enhanced tracking accuracy.</p>
@@ -139,7 +138,7 @@
         <div class="container mx-auto px-6 max-w-5xl">
             <h2 class="section-title">🔬 Data Collection</h2>
             <!-- Introductory Points are now correctly structured -->
-            <div class="space-y-4 text-lg text-gray-800 leading-snug text-justify mb-10">
+            <div class="space-y-4 text-xl text-gray-800 leading-snug text-justify mb-10">
                 <p>🛠️ To address the challenge of HMD slippage, we designed a novel data acquisition platform powered by a precision robotic arm, ensuring both repeatability and fine-grained annotation.</p>
                 <p>📷 The carousel below illustrates our full pipeline, from the hardware setup to the variety of data captured, highlighting what makes KaleidoEye a unique and comprehensive resource.</p>
             </div>
@@ -154,21 +153,21 @@
                             <div class="swiper-slide">
                                 <div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/data-1.png" alt="Protocol Overview"></div>
                                 <div class="slide-caption-area">
-                                    <strong>Protocol Overview:</strong> (a) Robotic arm controls slippage. (b) Joint calibration for accurate labels. (c) Diverse slippage paradigms. (d) Synchronized multi-modal data output.
+                                    Overview of the KaleidoEye data collection protocol. (a) A robotic arm controll HMD slippage while the subject's head remains fixed. (b) HoloLens and Pupil Core are jointly calibrated to obtain accurate gaze labels and 2D/3D annotations. (c) Slippage is executed under three types (RA-RC) and paired with diverse stimulus paradigms (PA-PC). (d) The dataset includes synchronized eye images, slippage poses, gaze targets, and eyeball annotations.
                                 </div>
                             </div>
                             <!-- Slide 2 -->
                             <div class="swiper-slide">
                                 <div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/data-2.jpg" alt="Data Acquisition Platform"></div>
                                 <div class="slide-caption-area">
-                                    <strong>Acquisition Platform:</strong> A 6DoF robotic arm, HoloLens 2, and a custom head stabilization frame are integrated to simulate diverse slippage conditions under fixed-head scenarios.
+                                    Hardware setup for precise and repeatable HMD slippage data acquisition. Our system integrates a 6DoF robotic arm, Microsoft HoloLens 2 headset, and custom 3D-printed mounting frame to simulate diverse slippage conditions under fixed-head scenarios. A head stabilization device ensures user immobility, while near-eye infrared (NIR) cameras capture gaze images under each controlled displacement. The right panel shows the hardware calibration process used to estimate the installation poses of the NIR cameras relative to the HoloLens scene camera.
                                 </div>
                             </div>
                             <!-- Slide 3 -->
                             <div class="swiper-slide">
                                 <div class="slide-image-container"><img src="https://lency-xx.github.io/Kaleidoeye/docs/figures/data-3.png" alt="Dataset Comparison"></div>
                                 <div class="slide-caption-area">
-                                    <strong>Dataset Comparison:</strong> KaleidoEye provides extensive, quantifiable slippage annotations across 11,130 poses, filling a critical gap left by existing datasets.
+                                    Comparison of publicly available gaze datasets with respect to key attributes and annotations. KaleidoEye stands out as the only dataset providing extensive, quantifiable HMD slippage annotations (11,130 samples) across diverse 6DoF poses, along with detailed pupil center and gaze target labels. In contrast, existing datasets often lack head-mounted slippage modeling, multimodal segmentation, or comprehensive label sources—limiting their applicability in realistic AR/VR settings.
                                 </div>
                             </div>
                         </div>
@@ -184,8 +183,8 @@
     <section id="benchmark" class="py-12 bg-white">
         <div class="container mx-auto px-6 max-w-5xl">
             <h2 class="section-title">✨ Benchmark Methodology</h2>
-            <div class="space-y-4 text-lg text-gray-800 leading-snug text-justify mb-10">
-                <p>⚠️ Real-time gaze tracking on HMDs requires balancing accuracy and efficiency. While high-performance models are too computationally heavy for embedded use, lightweight models often fail to adapt to appearance distortions caused by HMD slippage.</p>
+            <div class="space-y-4 text-xl text-gray-800 leading-snug text-justify mb-10">
+                <p>🔒 Real-time gaze tracking on HMDs requires balancing accuracy and efficiency. While high-performance models are too computationally heavy for embedded use, lightweight models often fail to adapt to appearance distortions caused by HMD slippage.</p>
                 <p>🗝️ We introduce <strong class="strong-keyword">EST-Gaze</strong>, a high-performance and lightweight framework tailored for real-time gaze tracking on HMDs under slippage conditions.</p>
                 <p>🗝️ Unlike conventional lightweight models that struggle with appearance distortions, EST-Gaze leverages edge-based geometric cues to guide spatial transformation and image rectification.</p>
                 <p>🗝️ This slippage-aware correction enables the network to align distorted eye images to a canonical view, significantly improving gaze accuracy with minimal computational overhead.</p>
@@ -247,7 +246,7 @@
             
             <!-- Results Subsection with Carousel -->
             <h3 class="subsection-title">📈 Results</h3>
-            <p class="text-lg text-gray-800 leading-relaxed text-justify mb-10">We benchmarked SOTA models against EST-Gaze to assess performance and robustness under slippage. The carousel presents our key quantitative results, demonstrating significant improvements.</p>
+            <p class="text-lg text-gray-800 leading-relaxed text-justify mb-10">We conducted a comprehensive benchmark comparing EST-Gaze with a range of state-of-the-art (SOTA) gaze tracking models, evaluating both <strong>tracking accuracy</strong> and <strong>robustness to HMD slippage</strong>.  Unlike many existing methods that degrade significantly under real-world distortions, EST-Gaze consistently outperformed both model-based and appearance-based baselines across all evaluation settings. The carousel below highlights our key results—demonstrating not only improved accuracy on both slippage and non-slippage data, but also significantly <strong>lower computational overhead</strong> and stronger generalization across diverse gaze conditions.</p>
             <div class="flex items-center justify-center space-x-4">
                 <div class="swiper-button-prev-flex"></div>
                 <div class="flex flex-col w-full">
@@ -273,9 +272,9 @@
         <div class="container mx-auto px-6 max-w-5xl">
             <h2 class="section-title">🎬 Conclusion</h2>
             <div class="conclusion-points space-y-6 text-xl text-gray-800 text-justify">
-                <p>💥 We introduce <strong class="strong-keyword">KaleidoEye</strong>, the first large-scale dataset with <strong>1.75M</strong> binocular samples across <strong>11,130</strong> quantified 6DoF slippage conditions for near-eye gaze tracking.</p>
-                <p>💪 We present <strong class="strong-keyword">EST-Gaze</strong>, a lightweight and interpretable framework that leverages edge-guided spatial transformations to normalize slippage-induced distortions.</p>
-                <p>🧩  EST-Gaze is designed as a plug-and-play module and improves slippage robustness by an average of <strong>34%</strong> across diverse models—without sacrificing efficiency.</p>
+                <p>💥 We introduce <strong>KaleidoEye</strong>, the first large-scale dataset with <strong>1.75M</strong> binocular samples across <strong>11,130</strong> quantified 6DoF slippage conditions for near-eye gaze tracking.</p>
+                <p>💪 We present <strong>EST-Gaze</strong>, a lightweight and interpretable framework that leverages edge-guided spatial transformations to normalize slippage-induced distortions.</p>
+                <p>🧩 EST-Gaze is designed as a plug-and-play module and improves slippage robustness by an average of <strong>34%</strong> across diverse models—without sacrificing efficiency.</p>
                 <p>🔍 Our findings highlight a key insight: achieving real-world robustness requires both <strong>diverse slippage data</strong> and <strong>architecture-aware structural alignment</strong>.</p>
             </div>
         </div>
